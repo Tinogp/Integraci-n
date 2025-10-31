@@ -16,8 +16,7 @@ import java.util.UUID;
 public class ComandasSingleton {
 
     /**
-     * UUID: id del mensaje original Integer: cantidad de fragmentos que hay en
-     * la lista, es decir, que actualmente conforman el mensaje original
+     * UUID: id del mensaje original 
      */
     public static Map<UUID, List<UUID>> comandas = new HashMap<UUID, List<UUID>>();
 
