@@ -1,5 +1,6 @@
 package com.iia.integracion.model.slot;
 
+import com.iia.integracion.model.mensaje.Mensaje;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -9,7 +10,7 @@ import org.w3c.dom.Document;
  */
 public class Slot {
     
-    private final List<Document> buff = new ArrayList<>();
+    private final List<Mensaje> buff = new ArrayList<>();
     private StrategyAcceso estrategiaAcceso;
     
     public Slot(){
@@ -25,11 +26,11 @@ public class Slot {
         this.estrategiaAcceso = nuevaEstrategia;
     }
     
-    public void escribirSlot(Document newdocument){
-        buff.add(newdocument);
+    public void escribirSlot(Mensaje mensaje){
+        buff.add(mensaje);
     }
     
-    public Document leerSlot(){
+    public Mensaje leerSlot(){
         return estrategiaAcceso.acceder(buff);
     }
     

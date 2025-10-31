@@ -1,5 +1,6 @@
 package com.iia.integracion.model.slot;
 
+import com.iia.integracion.model.mensaje.Mensaje;
 import java.util.List;
 import org.w3c.dom.Document;
 
@@ -10,14 +11,14 @@ import org.w3c.dom.Document;
 public class StrategyLeerPrimero implements StrategyAcceso{
 
     @Override
-    public Document acceder(List<Document> buffer) {
+    public Mensaje acceder(List<Mensaje> buffer) {
         if (buffer.isEmpty()) {
             System.out.println("Buffer vacio...");
             return null;
         }
-        Document doc = buffer.getFirst();
+        Mensaje mensaje = buffer.getFirst();
         buffer.removeFirst();
-        return doc;
+        return mensaje;
     }
     
 }
