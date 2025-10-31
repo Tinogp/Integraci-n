@@ -1,12 +1,9 @@
 package com.iia.integracion.model;
 
-import com.iia.integracion.model.mensaje.MensajeFragmento;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 /**
