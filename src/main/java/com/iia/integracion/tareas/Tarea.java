@@ -8,9 +8,9 @@ import java.util.List;
  * @author Quique
  */
 public abstract class Tarea {
-    private List<Slot> entradas;
-    private List<Slot> salidas;
-    private String xpathExpression;
+    protected List<Slot> entradas;
+    protected List<Slot> salidas;
+    protected String xpathExpression;
     
     // Constructor Base (para subclases que usan xpathExpression)
     public Tarea(List<Slot> entradas, List<Slot> salidas, String xpath) {
