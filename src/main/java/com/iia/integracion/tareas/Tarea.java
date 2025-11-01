@@ -9,9 +9,15 @@ import java.util.List;
  */
 public abstract class Tarea {
 
-    private  List<Slot> entradas;
-    private List<Slot> salidas;
-    private String xPathEspression;
+    protected List<Slot> entradas;
+    protected List<Slot> salidas;
+    protected String xPathEspression;
+
+    public Tarea(List<Slot> entradas, List<Slot> salidas, String xPathEspression) {
+        this.entradas = entradas;
+        this.salidas = salidas;
+        this.xPathEspression = xPathEspression;
+    }
 
     public abstract void ejecuta();
 }
