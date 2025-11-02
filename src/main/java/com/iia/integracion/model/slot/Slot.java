@@ -34,5 +34,7 @@ public class Slot {
         return estrategiaAcceso.acceder(buff);
     }
     
-    
+    public int numMensajes() {
+        return buff.size();
+    }
 }
