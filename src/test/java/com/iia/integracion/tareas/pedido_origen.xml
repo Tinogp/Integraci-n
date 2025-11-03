@@ -1,0 +1,6 @@
+<ProductoOrdenado id="1">
+    <sku>P001</sku>
+    <descripcion>Tornillo M8 de alta resistencia</descripcion>
+    <qty>5</qty>
+    <unitPrice>1.50</unitPrice>
+</ProductoOrdenado>
