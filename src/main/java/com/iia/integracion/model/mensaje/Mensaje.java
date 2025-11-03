@@ -25,6 +25,10 @@ public class Mensaje {
         return id;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+    
     public UUID getIdCorrelator() {
         return idCorrelator;
     }
