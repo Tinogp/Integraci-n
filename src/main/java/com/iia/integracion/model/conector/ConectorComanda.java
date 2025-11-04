@@ -23,7 +23,7 @@ public class ConectorComanda extends Conector {
 
     @Override
     public void ejecuta() {
-        File directory = new File(directorioPolling);
+        File directory = new File(Polling);
         File[] files = directory.listFiles();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -43,7 +43,7 @@ public class ConectorComanda extends Conector {
                 System.getLogger(ConectorComanda.class.getName()).log(System.Logger.Level.ERROR, (String) "Error de entrada salida al parsear un fichero a documento en ConectorComanda", ex);
             }
             document.getDocumentElement().normalize();
-            puerto.ejecuta(new Mensaje(document));
+            puerto.ejecutaEscritura(new Mensaje(document));
         }
 
     }

@@ -1,21 +1,16 @@
 package com.iia.integracion.model.conector;
 
 import com.iia.integracion.model.puerto.Puerto;
-import java.io.File;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
 
 public abstract class Conector {
 
     protected Puerto puerto;
-    protected String directorioPolling;
+    protected String Polling;
 
-    public Conector(Puerto puerto, String directorioPolling) {
+    public Conector(Puerto puerto, String Polling) {
         this.puerto = puerto;
-        this.directorioPolling = directorioPolling;
+        this.Polling = Polling;
     }
-    
-    
+
     public abstract void ejecuta();
 }

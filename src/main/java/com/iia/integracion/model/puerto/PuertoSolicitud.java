@@ -3,10 +3,17 @@ package com.iia.integracion.model.puerto;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 
-public class PuertoEntrada extends Puerto {
+/**
+ *
+ * @author tinog
+ */
+public class PuertoSolicitud extends Puerto {
 
-    public PuertoEntrada(Slot slot) {
-        super(slot);
+    private Slot slotSalida;
+
+    public PuertoSolicitud(Slot slotEntrada, Slot slotSalida) {
+        super(slotEntrada);
+        this.slotSalida = slotSalida;
     }
 
     @Override
@@ -16,7 +23,7 @@ public class PuertoEntrada extends Puerto {
 
     @Override
     public Mensaje ejecutaLectura() {
-        throw new UnsupportedOperationException("Not supported for this port."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return slotSalida.leerSlot();
     }
 
 }
