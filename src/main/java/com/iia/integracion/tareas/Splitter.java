@@ -3,6 +3,7 @@ package com.iia.integracion.tareas;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.xpath.XPath;
@@ -27,6 +28,7 @@ public class Splitter extends Tarea {
     public void ejecuta() {
         try {
             Mensaje msg = entradas.getFirst().leerSlot();
+            UUID idOriginal = msg.getId();
             //System.out.println(msg.toString());
             Document doc = msg.getCuerpo();
 
@@ -36,8 +38,9 @@ public class Splitter extends Tarea {
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
                 Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
-                //ComandasSingleton.addMensajeFragmento(fragmento.getId(), fragmento.getIdFragment()); SOLUCIONAARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
                 //System.out.println(fragmento.toString());
+                fragmento.setId(idOriginal);
+                fragmento.setTamano(nodes.getLength());
                 salidas.getFirst().escribirSlot(fragmento);
             }
         } catch (XPathExpressionException ex) {
