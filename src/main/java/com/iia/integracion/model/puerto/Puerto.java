@@ -11,6 +11,5 @@ public abstract class Puerto {
         this.slot = slot;
     }
 
-    public abstract void ejecutaEscritura(Mensaje mensaje);
-    public abstract Mensaje ejecutaLectura();
+   
 }

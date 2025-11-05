@@ -2,6 +2,7 @@ package com.iia.integracion.model.conector;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.puerto.Puerto;
+import com.iia.integracion.model.puerto.PuertoEntrada;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -22,12 +23,12 @@ public class ConectorComanda extends Conector {
     public ConectorComanda(Puerto puerto, String directorioPolling) {
         super(puerto, directorioPolling);
     }
-    
+
     @Override
     public void ejecuta() {
         File directory = new File(Polling);
         File[] files = directory.listFiles();
-        
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
         try {
@@ -48,9 +49,13 @@ public class ConectorComanda extends Conector {
             Mensaje msg = new Mensaje(document);
             UUID i = UUID.fromString(document.getElementsByTagName("order_id").item(0).getTextContent());
             msg.setId(i);
-            puerto.ejecutaEscritura(msg);
+            if (puerto instanceof PuertoEntrada) {
+                ((PuertoEntrada) puerto).ejecutaEscritura(msg);
+            } else {
+                System.err.println("Error en el tipo del puerto entrada...");
+            }
         }
-        
+
     }
-    
+
 }

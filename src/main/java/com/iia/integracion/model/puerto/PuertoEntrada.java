@@ -9,14 +9,9 @@ public class PuertoEntrada extends Puerto {
         super(slot);
     }
 
-    @Override
+
     public void ejecutaEscritura(Mensaje mensaje) {
         slot.escribirSlot(mensaje);
-    }
-
-    @Override
-    public Mensaje ejecutaLectura() {
-        throw new UnsupportedOperationException("Not supported for this port."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
