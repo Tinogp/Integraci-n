@@ -34,7 +34,7 @@ public class ConectorComanda extends Conector {
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
-            System.getLogger(ConectorComanda.class.getName()).log(System.Logger.Level.ERROR, (String) "Error al ejecutar ConectorComanda", ex);
+            System.getLogger(ConectorComanda.class.getName()).log(System.Logger.Level.ERROR, (String) "Error al crear una factoria de document en ejecutar ConectorComanda", ex);
         }
         Document document = null;
         for (File file : files) {

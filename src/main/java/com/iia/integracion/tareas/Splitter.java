@@ -1,14 +1,10 @@
 package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
-import com.iia.integracion.model.mensaje.MensajeFragmento;
 import com.iia.integracion.model.slot.Slot;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -39,7 +35,7 @@ public class Splitter extends Tarea {
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
-                Mensaje fragmento = new MensajeFragmento(crearDocumentoDesdeNodo(node));
+                Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node));
                 System.out.println(fragmento.toString());
                 salidas.getFirst().escribirSlot(fragmento);
             }

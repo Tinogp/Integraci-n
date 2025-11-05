@@ -11,8 +11,11 @@ import org.w3c.dom.Document;
 
 public class Mensaje {
 
-    protected UUID id;
-    protected UUID idCorrelator;
+    private UUID id;
+    private UUID idCorrelator;
+    private UUID idFragment;
+    private int tamano;
+
     protected Document cuerpo;
 
     public Mensaje(Document cuerpo) {
@@ -28,7 +31,7 @@ public class Mensaje {
     public void setId(UUID id) {
         this.id = id;
     }
-    
+
     public UUID getIdCorrelator() {
         return idCorrelator;
     }
@@ -44,7 +47,23 @@ public class Mensaje {
     public void setCuerpo(Document cuerpo) {
         this.cuerpo = cuerpo;
     }
-    
+
+    public UUID getIdFragment() {
+        return idFragment;
+    }
+
+    public void setIdFragment(UUID idFragment) {
+        this.idFragment = idFragment;
+    }
+
+    public int getTamano() {
+        return tamano;
+    }
+
+    public void setTamano(int tamano) {
+        this.tamano = tamano;
+    }
+
     @Override
     public String toString() {
         String cuerpoStr;
