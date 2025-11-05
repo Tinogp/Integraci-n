@@ -1,6 +1,5 @@
 package com.iia.integracion.tareas;
 
-import com.iia.integracion.model.ComandasSingleton;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
@@ -37,7 +36,7 @@ public class Splitter extends Tarea {
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
                 Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
-                ComandasSingleton.addMensajeFragmento(fragmento.getId(), fragmento.getIdFragment());
+                //ComandasSingleton.addMensajeFragmento(fragmento.getId(), fragmento.getIdFragment()); SOLUCIONAARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
                 //System.out.println(fragmento.toString());
                 salidas.getFirst().escribirSlot(fragmento);
             }
