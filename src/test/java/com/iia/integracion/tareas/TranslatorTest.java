@@ -25,13 +25,12 @@ public class TranslatorTest {
             + "<Detalle>Tornillo M8 de alta resistencia</Detalle><CantidadFacturada>5</CantidadFacturada>"
             + "<PrecioTotal>7.5</PrecioTotal></LineaFactura>";
 
-    // *** RUTA XSLT: ¡Asegúrate de que esta ruta sea correcta! ***
     private static final String RUTA_XSLT = "src\\test\\java\\com\\iia\\integracion\\tareas\\traductor_a_formato_final.xslt";
 
     // --- Metadatos de prueba (Todos UUIDs) ---
     private static final UUID ID_MENSAJE_ENTRADA = UUID.randomUUID();
     private static final UUID ID_CORRELATOR = UUID.randomUUID();
-    private static final UUID ID_FRAGMENTO = UUID.randomUUID(); // *** Cambiado a UUID ***
+    private static final UUID ID_FRAGMENTO = UUID.randomUUID();
 
     @Test
     void testEjecutaTraduccionYPropagaMetadatosFragmento() throws Exception {

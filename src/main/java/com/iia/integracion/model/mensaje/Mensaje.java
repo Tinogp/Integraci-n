@@ -21,6 +21,14 @@ public class Mensaje {
     public Mensaje(Document cuerpo) {
         this.id = UUID.randomUUID();
         this.idCorrelator = null;
+        this.idFragment = null;
+        this.cuerpo = cuerpo;
+    }
+
+    public Mensaje(Document cuerpo, UUID id) {
+        this.id = id;
+        this.idCorrelator = null;
+        this.idFragment = null;
         this.cuerpo = cuerpo;
     }
 

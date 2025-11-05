@@ -1,5 +1,6 @@
 package com.iia.integracion.tareas;
 
+import com.iia.integracion.model.ComandasSingleton;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author tinog
+ * @author Alvaro
  */
 public class Splitter extends Tarea {
 
@@ -27,16 +28,17 @@ public class Splitter extends Tarea {
     public void ejecuta() {
         try {
             Mensaje msg = entradas.getFirst().leerSlot();
+            //System.out.println(msg.toString());
             Document doc = msg.getCuerpo();
 
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
             NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
-
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
-                Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node));
-                System.out.println(fragmento.toString());
+                Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
+                ComandasSingleton.addMensajeFragmento(fragmento.getId(), fragmento.getIdFragment());
+                //System.out.println(fragmento.toString());
                 salidas.getFirst().escribirSlot(fragmento);
             }
         } catch (XPathExpressionException ex) {
@@ -52,9 +54,36 @@ public class Splitter extends Tarea {
                 .newDocumentBuilder()
                 .newDocument();
 
-        Node importado = nuevoDoc.importNode(node, true);
-        nuevoDoc.appendChild(importado);
+        Node currentNode = node;
 
+        // Crear una pila para reconstruir la jerarquía desde el nodo hasta la raíz
+        java.util.Stack<Node> stack = new java.util.Stack<>();
+
+        while (currentNode != null && currentNode.getNodeType() == Node.ELEMENT_NODE) {
+            stack.push(currentNode);
+            currentNode = currentNode.getParentNode();
+        }
+
+        // Reconstruir el documento desde la raíz hacia el nodo
+        Node parentNode = nuevoDoc;
+        while (!stack.isEmpty()) {
+            Node originalNode = stack.pop();
+            Node newNode;
+            if (stack.isEmpty()) {
+                newNode = nuevoDoc.importNode(originalNode, true);
+            } else {
+                newNode = nuevoDoc.importNode(originalNode, false);
+                if (originalNode.hasAttributes()) {
+                    for (int i = 0; i < originalNode.getAttributes().getLength(); i++) {
+                        Node attr = originalNode.getAttributes().item(i);
+                        Node newAttr = nuevoDoc.importNode(attr, true);
+                        newNode.getAttributes().setNamedItem(newAttr);
+                    }
+                }
+            }
+            parentNode.appendChild(newNode);
+            parentNode = newNode;
+        }
         return nuevoDoc;
     }
 }
