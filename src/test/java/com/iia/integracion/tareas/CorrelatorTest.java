@@ -5,11 +5,12 @@
 package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.conector.ConectorComanda;
+import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
-import com.iia.integracion.tareas.Splitter;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author 34646
  */
-public class SplitterTest {
+public class CorrelatorTest {
 
-    public SplitterTest() {
+    public CorrelatorTest() {
     }
 
     @BeforeAll
@@ -48,17 +49,32 @@ public class SplitterTest {
     // @Test
     // public void hello() {}
     @Test
-    public void testSplitter() {
+    public void testCorrelator() {
         Slot entrada = new Slot();
-        Slot salida = new Slot();
+        Slot salidaSplitter = new Slot();
+        Slot entradaCorrelator = new Slot();
+        Slot salida1 = new Slot();
+        Slot salida2 = new Slot();
+
         Puerto puerto = new PuertoEntrada(entrada);
         ConectorComanda conector = new ConectorComanda(puerto, "src/test/java/ficheroPrueba");
         conector.ejecuta();
-
-        Splitter splitter = new Splitter(List.of(entrada), List.of(salida), "/pedido/items/item");
+        //conector.ejecuta();
+        
+        Splitter splitter = new Splitter(List.of(entrada), List.of(entradaCorrelator), "//items/item/producto");
         splitter.ejecuta();
         
+        /*UUID uuid = UUID.randomUUID();
+        while (salidaSplitter.numMensajes() > 0) {
+            Mensaje m = salidaSplitter.leerSlot();
+            m.setIdCorrelator(uuid);
+            entradaCorrelator.escribirSlot(m);
+        }*/
 
-        assertEquals(3, salida.numMensajes());
+        Correlator correlator = new Correlator(List.of(entradaCorrelator, entradaCorrelator), List.of(salida1, salida2), "//producto");
+        correlator.ejecuta();
+
+        assertEquals(1, salida1.numMensajes());
+        assertEquals(1, salida2.numMensajes());
     }
 }
