@@ -1,5 +1,10 @@
 package com.iia.integracion.tareas;
 
+import com.iia.integracion.model.conector.ConectorComanda;
+import com.iia.integracion.model.puerto.Puerto;
+import com.iia.integracion.model.puerto.PuertoEntrada;
+import com.iia.integracion.model.slot.Slot;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,26 +15,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class EnricherTest {
 
     @Test
-    void testEnricherCambiaValor() throws Exception {
-        // Crear documento XML simple
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.newDocument();
-        
-        Element root = doc.createElement("test");
-        Element campo = doc.createElement("dato");
-        campo.setTextContent("original");
-        root.appendChild(campo);
-        doc.appendChild(root);
+    public void testEnricher() {
+        Slot entrada = new Slot();
+        Slot salida = new Slot();
+        Puerto puerto = new PuertoEntrada(entrada);
+        ConectorComanda conector = new ConectorComanda(puerto, "src/test/java/ficheroPrueba");
+        conector.ejecuta();
 
-        // Verificar valor original
-        assertEquals("original", campo.getTextContent());
+        Enricher enricher = new Enricher(List.of(entrada), List.of(salida), "/pedido/codigoPedido", "prueba");
+        enricher.ejecuta();
 
-        // Aquí probarías tu lógica de enriquecimiento
-        // Esto es solo un ejemplo básico
-        campo.setTextContent("enriquecido");
-        
-        // Verificar que cambió
-        assertEquals("enriquecido", campo.getTextContent());
+        assertEquals(1, salida.numMensajes());
     }
+
 }
