@@ -3,6 +3,7 @@ package com.iia.integracion.tareas;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.xpath.XPath;
@@ -25,25 +26,30 @@ public class Splitter extends Tarea {
 
     @Override
     public void ejecuta() {
-        try {
-            Mensaje msg = entradas.getFirst().leerSlot();
-            //System.out.println(msg.toString());
-            Document doc = msg.getCuerpo();
+        while (entradas.getFirst().numMensajes() > 0) {
+            try {
+                Mensaje msg = entradas.getFirst().leerSlot();
+                UUID idOriginal = msg.getId();
+                //System.out.println(msg.toString());
+                Document doc = msg.getCuerpo();
 
-            XPathFactory xPathFactory = XPathFactory.newInstance();
-            XPath xpath = xPathFactory.newXPath();
-            NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
-                //ComandasSingleton.addMensajeFragmento(fragmento.getId(), fragmento.getIdFragment()); SOLUCIONAARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-                //System.out.println(fragmento.toString());
-                salidas.getFirst().escribirSlot(fragmento);
+                XPathFactory xPathFactory = XPathFactory.newInstance();
+                XPath xpath = xPathFactory.newXPath();
+                NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
+                for (int i = 0; i < nodes.getLength(); i++) {
+                    Node node = nodes.item(i);
+                    Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
+                    fragmento.setId(idOriginal);
+                    fragmento.setTamano(nodes.getLength());
+                    //System.out.println(fragmento.toString());
+
+                    salidas.getFirst().escribirSlot(fragmento);
+                }
+            } catch (XPathExpressionException ex) {
+                Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (XPathExpressionException ex) {
-            Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

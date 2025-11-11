@@ -13,6 +13,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this 
             <cantidad>2</cantidad>
         </item>
         <item>
+            <producto>Teclado</producto>
+            <cantidad>2</cantidad>
+        </item>
+        <item>
             <producto>Ratón</producto>
             <cantidad>1</cantidad>
         </item>
