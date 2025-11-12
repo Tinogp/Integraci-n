@@ -2,6 +2,7 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
+import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
 
@@ -36,23 +37,19 @@ public class Replicator extends Tarea {
         Mensaje mensajeOriginal = this.entradas.getFirst().leerSlot();
 
         if (mensajeOriginal != null) {
-
-            Slot salida1 = this.salidas.get(0);
-            Slot salida2 = this.salidas.get(1);
-
+            
             Document cuerpoOriginal = mensajeOriginal.getCuerpo();
-
-            //Copia 1
-            Mensaje mensaje1 = new Mensaje(cuerpoOriginal);
-            mensaje1.setIdCorrelator(mensajeOriginal.getId());
-
-            //Copia 2
-            Mensaje mensaje2 = new Mensaje(cuerpoOriginal);
-            mensaje2.setIdCorrelator(mensajeOriginal.getId());
-
-            //Escribir copias en slots de salidas
-            salida1.escribirSlot(mensaje1);
-            salida2.escribirSlot(mensaje2);
+            
+            for (int i = 0; i < salidas.size(); i++) {
+                
+                Slot salida = this.salidas.get(i);
+                
+                Mensaje mensaje = new Mensaje(cuerpoOriginal);
+                mensaje.setIdCorrelator(mensajeOriginal.getId());
+                
+                salida.escribirSlot(mensaje);
+                
+            }           
         }
 
     }

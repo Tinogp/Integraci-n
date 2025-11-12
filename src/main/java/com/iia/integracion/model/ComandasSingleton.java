@@ -15,24 +15,29 @@ public class ComandasSingleton {
     /**
      * UUID: id del mensaje original 
      */
-    public static Map<UUID, List<UUID>> comandas = new HashMap<UUID, List<UUID>>();
+    public static Map<UUID, String> comandas = new HashMap<UUID, String>();
+    public final static ComandasSingleton singleton = new ComandasSingleton();
 
-    public static Map<UUID, List<UUID>> getInstancia() {
+    public static Map<UUID, String> getInstancia() {
         return comandas;
-    }
+    }     
 
     /**
-     * Este método sirve para añadir un nuevo mensaje original al Map
+     * Este método sirve para relacionar el id de un mensaje con el order id
      *
      * @param id id del mensaje original
      * @return devolvemos si se ha añadido de forma correcta o no al Map
      */
-    public static boolean addMensaje(UUID id) {
-        List<UUID> listaVacia = new ArrayList<>();
-        return comandas.putIfAbsent(id, listaVacia) == null;
+    public static boolean addMensaje(UUID id, String order) {       
+        return comandas.putIfAbsent(id, order) == null;
     }
-
-    public static boolean addMensajeFragmento(UUID id, UUID idFragmento) {
-        return comandas.get(id).add(idFragmento);
+    
+    /**
+     * 
+     * @param id del mensaje original
+     * @return devuelve el order id según un id de mensaje
+     */
+    public static String getOrder(UUID id){
+        return comandas.get(id);
     }
 }

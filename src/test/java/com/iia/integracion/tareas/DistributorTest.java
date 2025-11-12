@@ -35,7 +35,7 @@ public class DistributorTest {
     private Mensaje mensajeCaliente;
     private Mensaje mensajeFrio;
     
-    private static final String XPATH_HOT = "drink/type = 'hot'";
+    private static final String XPATH_HOT = "drink/type = 'cold'";
     
     private Document crearDocumentoDesdeString(String xmlString) {
         try {

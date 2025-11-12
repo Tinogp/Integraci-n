@@ -36,7 +36,7 @@ public class Distributor extends Tarea{
             throw new IllegalArgumentException("Distributor debe tener 1 slot de entrada");
         }
         
-        if(salidas == null || salidas.size() != 2){
+        if(salidas == null || salidas.size() < 2){
             throw new IllegalArgumentException("Distributor debe tener 2 slots de salida");
         }  
 
@@ -58,24 +58,31 @@ public class Distributor extends Tarea{
         
         Mensaje mensaje = this.entradas.getFirst().leerSlot();
         
-        if(mensaje != null){
-            
-            Slot salidaCaliente = this.salidas.get(0);
-            Slot salidaFria = this.salidas.get(1);
+        if(mensaje != null){                
             
             try{
                 
                 Document cuerpo = mensaje.getCuerpo();
-                boolean resultado = (Boolean) this.xpath.evaluate(cuerpo, XPathConstants.BOOLEAN);
+                Double resultadoDouble = (Double) this.xpath.evaluate(cuerpo, XPathConstants.NUMBER);
                 
-                if(resultado){ //bebida caliente                    
-                    salidaCaliente.escribirSlot(mensaje);
-                }else{ //bebida fria
-                    salidaFria.escribirSlot(mensaje);
-                }
+                int indiceSalida = resultadoDouble.intValue();
+                
+                if(indiceSalida >= 0 && indiceSalida < this.salidas.size()){
+                    
+                    Slot salida = this.salidas.get(indiceSalida);
+                    
+                    salida.escribirSlot(mensaje);                                
+                }else {
+                
+                    Logger.getLogger(Distributor.class.getName()).log(
+                        Level.WARNING, 
+                        "El índice de salida {0} está fuera de rango para {1} slots de salida.", 
+                        new Object[]{indiceSalida, this.salidas.size()}
+                    );
+            }
                 
             } catch (XPathExpressionException ex) {
-                Logger.getLogger(Distributor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Distributor.class.getName()).log(Level.SEVERE, "Error al evaluar la expresión XPath.", ex);
             }                                    
         }
         
