@@ -47,12 +47,12 @@ public class ConectorComanda extends Conector {
             }
             document.getDocumentElement().normalize();
             Mensaje msg = new Mensaje(document);
-            UUID i = UUID.fromString(document.getElementsByTagName("order_id").item(0).getTextContent());
-            msg.setId(i);
+            //UUID i = UUID.fromString(document.getElementsByTagName("order_id").item(0).getTextContent());
+            //msg.setId(i);
             if (puerto instanceof PuertoEntrada) {
                 ((PuertoEntrada) puerto).ejecutaEscritura(msg);
             } else {
-                System.err.println("Error en el tipo del puerto entrada...");
+                System.err.println("Error en el tipo del puerto entrada en conector comanda...");
             }
         }
 
