@@ -59,6 +59,17 @@ public class Splitter extends Tarea {
                 .newDocumentBuilder()
                 .newDocument();
 
+        Node importado = nuevoDoc.importNode(node, true);
+        nuevoDoc.appendChild(importado);
+        return nuevoDoc;
+    }
+
+    /*private Document crearDocumentoDesdeNodo(Node node) throws Exception {
+        Document nuevoDoc = javax.xml.parsers.DocumentBuilderFactory
+                .newInstance()
+                .newDocumentBuilder()
+                .newDocument();
+
         Node currentNode = node;
 
         // Crear una pila para reconstruir la jerarquía desde el nodo hasta la raíz
@@ -90,5 +101,5 @@ public class Splitter extends Tarea {
             parentNode = newNode;
         }
         return nuevoDoc;
-    }
+    }*/
 }
