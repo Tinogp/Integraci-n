@@ -10,6 +10,7 @@ public class PuertoEntrada extends Puerto {
     }
 
 
+    //traducir de otros formatos como json a xml
     public void ejecutaEscritura(Mensaje mensaje) {
         slot.escribirSlot(mensaje);
     }
