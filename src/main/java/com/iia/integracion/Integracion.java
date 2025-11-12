@@ -3,6 +3,7 @@ package com.iia.integracion;
 import com.iia.integracion.model.conector.ConectorComanda;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
+import com.iia.integracion.tareas.Distributor;
 import com.iia.integracion.tareas.Replicator;
 import com.iia.integracion.tareas.Splitter;
 import java.util.ArrayList;
@@ -33,7 +34,9 @@ public class Integracion {
         aRepDis.add(repDis1);
         aRepDis.add(repDis2);
         Replicator rep = new Replicator(aSplRep, aRepDis);
-        
+
+        Distributor dis1 = new Distributor(aRepDis.subList(0, 0), aRepDis.subList(1, 1), "");
+        Distributor dis2 = new Distributor(aRepDis.subList(1, 1), aRepDis.subList(1, 1), "");
 
     }
 }
