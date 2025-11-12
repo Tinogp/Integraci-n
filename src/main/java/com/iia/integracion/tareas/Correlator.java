@@ -13,6 +13,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Node;
 
+///////////////////////////////////////////////////////////////////////////////
+///comprobar como salen
 /**
  *
  * @author Alvaro

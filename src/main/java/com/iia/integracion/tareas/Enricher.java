@@ -11,7 +11,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathExpression;
-
+///////////////////////////////////////////////////////////////////////////////////////////////
+///No utiliza xpath expresion
 /**
  *
  * @author Alvaro

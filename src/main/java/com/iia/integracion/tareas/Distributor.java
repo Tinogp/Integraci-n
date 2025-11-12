@@ -11,7 +11,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///solo valido para dos salidas
 /**
  * 
  * @author Quique
