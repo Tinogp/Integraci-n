@@ -22,9 +22,9 @@ public class ConectorBX extends Conector {
 
     Connection conexion;
 
-    public ConectorBX(Puerto puerto, String directorioPolling) {
-        super(puerto, directorioPolling);
-        conexion = ConexionMySQL.getConexion();
+    public ConectorBX(Puerto puerto, String URL) {
+        super(puerto, URL);
+        conexion = ConexionMySQL.getConexion(URL);
         if (!(puerto instanceof PuertoSolicitud)) {
             System.err.println("Error en la creacion del conectorBX, el puerto no es del tipo solicitud");
             System.exit(0);
