@@ -36,7 +36,7 @@ public class ConectorBX extends Conector {
         PuertoSolicitud ps = (PuertoSolicitud) puerto;
         Document doc;
         Mensaje msg = ps.ejecutaLectura();
-        String query = msg.getCuerpo().getElementsByTagName("sql").item(0).getTextContent();
+        String query = msg.getCuerpo().getElementsByTagName("sql").item(0).getNodeValue();
         try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {

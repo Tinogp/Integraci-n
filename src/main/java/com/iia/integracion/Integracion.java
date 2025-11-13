@@ -36,7 +36,6 @@ public class Integracion {
         ConectorBX bf = new ConectorBX(puertosolbf, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
         ConectorBX bc = new ConectorBX(puertosolbc, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
 
-
         // Declaracion de tareas
         ArrayList<Slot> apoll = new ArrayList<>();
         apoll.add(poll);
@@ -56,7 +55,6 @@ public class Integracion {
         Distributor disUp = new Distributor(aRepDis.subList(0, 0), aDisTransUp, "");
         Distributor disDown = new Distributor(aRepDis.subList(1, 1), aDisTransDown, "");
 
-        
     }
 
 }
