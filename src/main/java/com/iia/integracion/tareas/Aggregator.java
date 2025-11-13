@@ -22,11 +22,9 @@ import org.w3c.dom.Node;
  */
 public class Aggregator extends Tarea {
 
-<<<<<<< HEAD
+
     private Map<UUID, List<Mensaje>> mapaFragmentos; //asocia los fragmentos al mensaje original   
-=======
-    private Map<UUID, List<Mensaje>> mapaFragmentos; //asocia los fragmentps al mensaje original 
->>>>>>> 0c22496787eba607b3a4654a459c094d9c57922f
+
 
     public Aggregator(List<Slot> entradas, List<Slot> salidas, String xpath) {
         super(entradas, salidas, xpath);
