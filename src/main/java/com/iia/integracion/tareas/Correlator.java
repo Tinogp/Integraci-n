@@ -2,6 +2,7 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,17 +13,16 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Node;
 
-///////////////////////////////////////////////////////////////////////////////
-///comprobar como salen
 /**
  *
  * @author Alvaro
  */
 public class Correlator extends Tarea {
 
-    private Map<UUID, Mensaje> mensajesEntrantesCorelator;
-    private Map<String, Mensaje> mensajesEntrantesSinCorrelator;
+    private Map<UUID, List<Mensaje>> mensajesEntrantesCorelator;
+    private Map<String, List<Mensaje>> mensajesEntrantesSinCorrelator;
     private String xpathExpression;
+
     public Correlator(List<Slot> entradas, List<Slot> salidas, String xpath) {
         super(entradas, salidas);
         this.xpathExpression = xpath;
@@ -32,9 +32,8 @@ public class Correlator extends Tarea {
 
     @Override
     public void ejecuta() {
-        while (entradas.getFirst().numMensajes() > 0 || entradas.get(1).numMensajes() > 0) {
-            relaciona(entradas.getFirst().leerSlot());
-            relaciona(entradas.get(1).leerSlot());
+        for (Slot s : entradas) {
+            relaciona(s.leerSlot());
         }
     }
 
@@ -52,11 +51,15 @@ public class Correlator extends Tarea {
 
     public void relacionaPorId(Mensaje msg) {
         if (mensajesEntrantesCorelator.containsKey(msg.getIdCorrelator())) {
-            salidas.getFirst().escribirSlot(msg);
-            salidas.get(1).escribirSlot(mensajesEntrantesCorelator.get(msg.getIdCorrelator()));
-            mensajesEntrantesCorelator.remove(msg.getIdCorrelator());
+            List<Mensaje> listMensaje = mensajesEntrantesCorelator.get(msg.getIdCorrelator());
+            listMensaje.add(msg);
+            if (mensajesEntrantesCorelator.get(msg.getIdCorrelator()).size() == salidas.size()) {
+                escribirSalidas(listMensaje);
+            }
         } else {
-            mensajesEntrantesCorelator.put(msg.getIdCorrelator(), msg);
+            List<Mensaje> nuevaLista = new ArrayList<>();
+            nuevaLista.add(msg);
+            mensajesEntrantesCorelator.put(msg.getIdCorrelator(), nuevaLista);
         }
     }
 
@@ -65,32 +68,41 @@ public class Correlator extends Tarea {
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
             Node node = (Node) xpath.evaluate(xpathExpression, msg.getCuerpo(), XPathConstants.NODE);
-            
+
             if (node == null) {
                 //System.out.println("No se encontró nodo con XPath: " + xpathExpression);
                 return;
             }
-                        String valor = node.getTextContent();
+            String valor = node.getTextContent();
             if (valor == null || valor.trim().isEmpty()) {
                 //System.out.println("Nodo vacío con XPath: " + xpathExpression);
                 return;
             }
-            
+
             //System.out.println("Valor para correlación: " + valor);
-            
             if (mensajesEntrantesSinCorrelator.containsKey(valor)) {
-                Mensaje mensajePareja = mensajesEntrantesSinCorrelator.get(valor);
-                salidas.get(0).escribirSlot(msg);
-                salidas.get(1).escribirSlot(mensajePareja);
-                mensajesEntrantesSinCorrelator.remove(valor);
+                List<Mensaje> listMensaje = mensajesEntrantesSinCorrelator.get(valor);
+                listMensaje.add(msg);
+                if (mensajesEntrantesSinCorrelator.get(valor).size() == salidas.size()) {
+                    escribirSalidas(listMensaje);
+                }
                 //System.out.println("Pareja encontrada por valor: " + valor);
             } else {
-                mensajesEntrantesSinCorrelator.put(valor, msg);
+                List<Mensaje> nuevaLista = new ArrayList<>();
+                nuevaLista.add(msg);
+                mensajesEntrantesSinCorrelator.put(valor, nuevaLista);
                 //System.out.println("Mensaje guardado esperando pareja con valor: " + valor);
             }
         } catch (XPathExpressionException x) {
             System.err.println("Error en expresión XPath: " + xpathExpression);
             x.printStackTrace();
         }
+    }
+
+    private void escribirSalidas(List<Mensaje> listMensaje) {
+        for (int i = 0; i < salidas.size(); i++) {
+            salidas.get(i).escribirSlot(listMensaje.get(i));
+        }
+        mensajesEntrantesCorelator.remove(listMensaje.getFirst().getIdCorrelator());
     }
 }
