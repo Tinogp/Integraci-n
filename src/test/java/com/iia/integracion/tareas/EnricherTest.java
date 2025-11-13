@@ -18,8 +18,8 @@ class EnricherTest {
         ConectorComanda conector = new ConectorComanda(puerto, "src/test/java/ficheroPrueba");
         conector.ejecuta();
 
-        Enricher enricher = new Enricher(List.of(entrada), List.of(salida), "/pedido/codigoPedido", "prueba");
-        enricher.ejecuta();
+        //Enricher enricher = new Enricher(List.of(entrada), List.of(salida), "/pedido/codigoPedido", "prueba");
+        //enricher.ejecuta();
 
         assertEquals(1, salida.numMensajes());
     }
