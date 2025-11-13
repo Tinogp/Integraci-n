@@ -32,6 +32,14 @@ public class Mensaje {
         this.cuerpo = cuerpo;
     }
 
+    public Mensaje(Mensaje otro) {
+        this.id = otro.id;
+        this.idCorrelator = otro.idCorrelator;
+        this.idFragment = otro.idFragment;
+        this.tamano = otro.tamano;
+        this.cuerpo = otro.cuerpo;
+    }
+
     public UUID getId() {
         return id;
     }

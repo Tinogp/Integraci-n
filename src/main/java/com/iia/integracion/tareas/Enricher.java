@@ -20,10 +20,12 @@ import javax.xml.xpath.XPathExpression;
 public class Enricher extends Tarea {
 
     private String valor;
+    private String xpathExpression;
 
     public Enricher(List<Slot> entradas, List<Slot> salidas, String xpath, String valor) {
-        super(entradas, salidas, xpath);
+        super(entradas, salidas);
         this.valor = valor;
+        this.xpathExpression = xpath;
     }
 
     @Override

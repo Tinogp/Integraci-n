@@ -25,9 +25,11 @@ public class Aggregator extends Tarea {
 
     private Map<UUID, List<Mensaje>> mapaFragmentos; //asocia los fragmentos al mensaje original   
 
+    private String xpathExpression;
 
     public Aggregator(List<Slot> entradas, List<Slot> salidas, String xpath) {
-        super(entradas, salidas, xpath);
+        super(entradas, salidas);
+        this.xpathExpression = xpath;
 
         this.mapaFragmentos = new HashMap<>();
     }

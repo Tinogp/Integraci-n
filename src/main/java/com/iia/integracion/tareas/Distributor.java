@@ -29,7 +29,7 @@ public class Distributor extends Tarea{
      * @param xPathExpression Evalua a true cuando la bebida es caliente (/drink/type = 'hot')
      */
     public Distributor(List<Slot> entradas, List<Slot> salidas, String xPathExpression) {
-        super(entradas, salidas, xPathExpression);
+        super(entradas, salidas);
         
         //Comprobar numeros de slots y Xpath
         if(entradas == null || entradas.size() != 1){

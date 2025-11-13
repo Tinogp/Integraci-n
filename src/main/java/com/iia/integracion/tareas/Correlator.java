@@ -2,7 +2,6 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,10 @@ public class Correlator extends Tarea {
 
     private Map<UUID, Mensaje> mensajesEntrantesCorelator;
     private Map<String, Mensaje> mensajesEntrantesSinCorrelator;
-
+    private String xpathExpression;
     public Correlator(List<Slot> entradas, List<Slot> salidas, String xpath) {
-        super(entradas, salidas, xpath);
+        super(entradas, salidas);
+        this.xpathExpression = xpath;
         mensajesEntrantesCorelator = new HashMap<>();
         mensajesEntrantesSinCorrelator = new HashMap<>();
     }

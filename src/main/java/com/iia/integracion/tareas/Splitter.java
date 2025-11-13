@@ -20,8 +20,10 @@ import org.w3c.dom.NodeList;
  */
 public class Splitter extends Tarea {
 
+    private String xpathExpression;
     public Splitter(List<Slot> entradas, List<Slot> salidas, String xPathEspression) {
-        super(entradas, salidas, xPathEspression);
+        super(entradas, salidas);
+        this.xpathExpression = xPathEspression;
     }
 
     @Override
