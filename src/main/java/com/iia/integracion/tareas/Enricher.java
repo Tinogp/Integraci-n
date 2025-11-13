@@ -5,8 +5,8 @@ import com.iia.integracion.model.slot.Slot;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 
 /**
  *
@@ -14,71 +14,64 @@ import org.w3c.dom.NodeList;
  */
 public class Enricher extends Tarea {
 
-    private String etiquetaFuente;
-    private String etiquetaDestino;
-
-    public Enricher(List<Slot> entradas, List<Slot> salidas, String etiquetaFuente, String equitaDestino) {
+    public Enricher(List<Slot> entradas, List<Slot> salidas) {
         super(entradas, salidas);
-        this.etiquetaFuente = etiquetaFuente;
-        this.etiquetaDestino = equitaDestino;
     }
 
     @Override
     public void ejecuta() {
+        Document mensajeBase = entradas.get(0).leerSlot().getCuerpo();
+        Document mensajeEnriquecimiento = entradas.get(1).leerSlot().getCuerpo();
 
+        fusionarNodos(mensajeBase.getDocumentElement(), mensajeEnriquecimiento.getDocumentElement());
 
-        Mensaje msgFuente = entradas.get(0).leerSlot();
+        Mensaje mensajeSalida = new Mensaje(mensajeBase);
+        System.out.println(mensajeSalida);
+        salidas.getFirst().escribirSlot(mensajeSalida);
+    }
 
-        Mensaje msgDestino = entradas.get(1).leerSlot();               
+    private void fusionarNodos(Element nodoBase, Element nodoEnriquecimiento) {
+        NodeList hijosEnriquecimiento = nodoEnriquecimiento.getChildNodes();
 
-        if(msgFuente != null && msgDestino != null){
-           
-            String valor = extraerValorPorEtiqueta(msgFuente.getCuerpo(), etiquetaFuente);
+        for (int i = 0; i < hijosEnriquecimiento.getLength(); i++) {
+            Node hijoEnriquecimiento = hijosEnriquecimiento.item(i);
 
-            if(valor != null){
-                inyectarValor(msgDestino.getCuerpo(), etiquetaDestino, valor);
-            } else {
-                System.out.println("Etiqueta fuente no encontrada: " + etiquetaFuente);
+            if (hijoEnriquecimiento.getNodeType() == Node.ELEMENT_NODE) {
+                Element elementoEnriquecimiento = (Element) hijoEnriquecimiento;
+                String nombreElemento = elementoEnriquecimiento.getTagName();
+
+                // Buscar si existe un elemento con el mismo nombre en el nodo base
+                NodeList hijosBase = nodoBase.getChildNodes();
+                boolean encontrado = false;
+
+                for (int j = 0; j < hijosBase.getLength(); j++) {
+                    Node hijoBase = hijosBase.item(j);
+                    if (hijoBase.getNodeType() == Node.ELEMENT_NODE
+                            && ((Element) hijoBase).getTagName().equals(nombreElemento)) {
+
+                        // Si ambos tienen hijos, fusionar recursivamente
+                        if (elementoEnriquecimiento.hasChildNodes() && hijoBase.hasChildNodes()) {
+                            fusionarNodos((Element) hijoBase, elementoEnriquecimiento);
+                        } else {
+                            // Si el elemento de enriquecimiento tiene contenido, reemplazar
+                            if (elementoEnriquecimiento.hasChildNodes()
+                                    || elementoEnriquecimiento.getTextContent() != null) {
+                                nodoBase.replaceChild(
+                                        nodoBase.getOwnerDocument().importNode(elementoEnriquecimiento, true),
+                                        hijoBase
+                                );
+                            }
+                        }
+                        encontrado = true;
+                        break;
+                    }
+                }
+                // Si no se encontró el elemento en el base, agregarlo
+                if (!encontrado) {
+                    Node nodoImportado = nodoBase.getOwnerDocument().importNode(elementoEnriquecimiento, true);
+                    nodoBase.appendChild(nodoImportado);
+                }
             }
-
-            salidas.get(0).escribirSlot(new Mensaje(msgDestino));        
-
-        }
-        
-    }
-
-    /*
-     * Método auxiliar para leer el valor de una etiqueta específica del documento XML.
-     */
-    private String extraerValorPorEtiqueta(Document doc, String etiqueta) {
-
-        Element raiz = doc.getDocumentElement();
-        NodeList nodos = raiz.getElementsByTagName(etiqueta);
-
-        if (nodos.getLength() > 0) { // Si se encuentra la etiqueta
-            return nodos.item(0).getTextContent();
-        }
-
-        return null;
-    }
-
-    /*
-     * Inyecta un valor en una etiqueta específica del documento XML.
-     */
-    private void inyectarValor(Document doc, String etiqueta, String valor) {
-
-        Element raiz = doc.getDocumentElement();
-        NodeList nodos = raiz.getElementsByTagName(etiqueta);
-
-        if (nodos.getLength() > 0) { // Si se encuentra la etiqueta
-            nodos.item(0).setTextContent(valor);
-
-        } else { //si no existe, crear etiqueta y añadirla al final
-            Element nuevoElemento = doc.createElement(etiqueta);
-            nuevoElemento.setTextContent(valor);
-            raiz.appendChild(nuevoElemento);            
         }
     }
-
-    
 }
