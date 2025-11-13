@@ -5,94 +5,80 @@ import com.iia.integracion.model.slot.Slot;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import javax.xml.xpath.XPathExpression;
-///////////////////////////////////////////////////////////////////////////////////////////////
-///No utiliza xpath expresion
+
+
 /**
  *
  * @author Alvaro
  */
 public class Enricher extends Tarea {
 
-    private String valor;
-    private String xpathExpression;
+    private String etiquetaFuente;
+    private String etiquetaDestino;
 
-    public Enricher(List<Slot> entradas, List<Slot> salidas, String xpath, String valor) {
+    public Enricher(List<Slot> entradas, List<Slot> salidas, String etiquetaFuente, String equitaDestino) {
         super(entradas, salidas);
-        this.valor = valor;
-        this.xpathExpression = xpath;
+        this.etiquetaFuente = etiquetaFuente;
+        this.etiquetaDestino = equitaDestino;
     }
 
     @Override
     public void ejecuta() {
-        Mensaje msg = entradas.getFirst().leerSlot();
-        System.out.println(msg);
-        Document cuerpoMensaje = msg.getCuerpo();
 
-        try {
-            XPathFactory xpathFactory = XPathFactory.newInstance();
-            XPath xpath = xpathFactory.newXPath();
 
-            XPathExpression expr = xpath.compile(xpathExpression);
+        Mensaje msgFuente = entradas.get(0).leerSlot();
 
-            Node targetNode = (Node) expr.evaluate(cuerpoMensaje, XPathConstants.NODE);
+        Mensaje msgDestino = entradas.get(1).leerSlot();               
 
-            if (targetNode != null) {
-                targetNode.setTextContent(valor);
+        if(msgFuente != null && msgDestino != null){
+           
+            String valor = extraerValorPorEtiqueta(msgFuente.getCuerpo(), etiquetaFuente);
+
+            if(valor != null){
+                inyectarValor(msgDestino.getCuerpo(), etiquetaDestino, valor);
             } else {
-                crearEstructuraXPath(cuerpoMensaje, xpathExpression, valor);
+                System.out.println("Etiqueta fuente no encontrada: " + etiquetaFuente);
             }
 
-        } catch (Exception e) {
-            System.err.println("Error al enriquecer el mensaje con XPath: " + e.getMessage());
-            e.printStackTrace();
-        }
+            salidas.get(0).escribirSlot(new Mensaje(msgDestino));        
 
-        Mensaje msgFinal = new Mensaje(cuerpoMensaje);
-        System.out.println(msgFinal);
-        salidas.getFirst().escribirSlot(msgFinal);
+        }
+        
     }
 
-    /**
-     * Método auxiliar para crear la estructura XPath si no existe
+    /*
+     * Método auxiliar para leer el valor de una etiqueta específica del documento XML.
      */
-    private void crearEstructuraXPath(Document doc, String xpathExpression, String value) {
-        try {
-            String[] parts = xpathExpression.split("/");
-            Node currentNode = doc.getDocumentElement();
+    private String extraerValorPorEtiqueta(Document doc, String etiqueta) {
 
-            for (String part : parts) {
-                if (part.isEmpty() || part.equals(doc.getDocumentElement().getNodeName())) {
-                    continue; 
-                }
+        Element raiz = doc.getDocumentElement();
+        NodeList nodos = raiz.getElementsByTagName(etiqueta);
 
-                NodeList children = currentNode.getChildNodes();
-                Node foundNode = null;
+        if (nodos.getLength() > 0) { // Si se encuentra la etiqueta
+            return nodos.item(0).getTextContent();
+        }
 
-                for (int i = 0; i < children.getLength(); i++) {
-                    if (children.item(i).getNodeName().equals(part)) {
-                        foundNode = children.item(i);
-                        break;
-                    }
-                }
+        return null;
+    }
 
-                if (foundNode == null) {
-                    Element newElement = doc.createElement(part);
-                    currentNode.appendChild(newElement);
-                    currentNode = newElement;
-                } else {
-                    currentNode = foundNode;
-                }
-            }
-            currentNode.setTextContent(value);
+    /*
+     * Inyecta un valor en una etiqueta específica del documento XML.
+     */
+    private void inyectarValor(Document doc, String etiqueta, String valor) {
 
-        } catch (Exception e) {
-            System.err.println("Error al crear estructura XPath: " + e.getMessage());
+        Element raiz = doc.getDocumentElement();
+        NodeList nodos = raiz.getElementsByTagName(etiqueta);
+
+        if (nodos.getLength() > 0) { // Si se encuentra la etiqueta
+            nodos.item(0).setTextContent(valor);
+
+        } else { //si no existe, crear etiqueta y añadirla al final
+            Element nuevoElemento = doc.createElement(etiqueta);
+            nuevoElemento.setTextContent(valor);
+            raiz.appendChild(nuevoElemento);            
         }
     }
+
+    
 }
