@@ -6,10 +6,6 @@ import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EnricherTest {

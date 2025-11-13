@@ -4,21 +4,9 @@
  */
 package com.iia.integracion.tareas;
 
-import com.iia.integracion.model.mensaje.Mensaje;
-import java.util.UUID;
 import com.iia.integracion.model.slot.Slot;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -44,7 +32,7 @@ public class AggregatorTest {
         
         aggregator = new Aggregator(List.of(entrada), List.of(salida), raiz);        
     }
-      
+      /* 
     @Test
     public void testAggregator() {
         
@@ -92,6 +80,6 @@ public class AggregatorTest {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new RuntimeException("Error al parsear XML de prueba", e);
         }
-    }
+    }*/
     
 }

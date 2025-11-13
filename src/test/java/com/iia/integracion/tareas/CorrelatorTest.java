@@ -5,12 +5,10 @@
 package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.conector.ConectorComanda;
-import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +41,7 @@ public class CorrelatorTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
+    
     // The methods must be annotated with annotation @Test. For example:
     //
     // @Test
@@ -51,7 +49,6 @@ public class CorrelatorTest {
     @Test
     public void testCorrelator() {
         Slot entrada = new Slot();
-        Slot salidaSplitter = new Slot();
         Slot entradaCorrelator = new Slot();
         Slot salida1 = new Slot();
         Slot salida2 = new Slot();

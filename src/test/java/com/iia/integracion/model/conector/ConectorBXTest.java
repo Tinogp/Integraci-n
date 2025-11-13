@@ -47,7 +47,6 @@ public class ConectorBXTest {
         System.out.println("ejecuta");
         ConectorBX instance = new ConectorBX(new PuertoEntrada(new Slot()), "");
         instance.ejecuta();
-        // TODO review the generated test code and remove the default call to fail.
         assertTrue(true);
     }
     
