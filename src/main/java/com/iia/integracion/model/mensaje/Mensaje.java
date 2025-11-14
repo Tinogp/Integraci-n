@@ -103,7 +103,7 @@ public class Mensaje {
         return "Mensaje{"
                 + "id=" + id
                 + ", idCorrelator=" + idCorrelator
-                + ", cuerpo=" + cuerpoStr
+                + ", cuerpo=\n" + cuerpoStr
                 + '}';
     }
 }

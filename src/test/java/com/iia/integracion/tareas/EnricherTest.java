@@ -4,7 +4,6 @@ import com.iia.integracion.model.conector.ConectorComanda;
 import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

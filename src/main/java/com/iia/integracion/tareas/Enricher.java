@@ -26,7 +26,7 @@ public class Enricher extends Tarea {
         fusionarNodos(mensajeBase.getDocumentElement(), mensajeEnriquecimiento.getDocumentElement());
 
         Mensaje mensajeSalida = new Mensaje(mensajeBase);
-        System.out.println(mensajeSalida);
+        //System.out.println(mensajeSalida);
         salidas.getFirst().escribirSlot(mensajeSalida);
     }
 

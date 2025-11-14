@@ -4,7 +4,6 @@
  */
 package com.iia.integracion.model.conector;
 
-import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
 import org.junit.jupiter.api.AfterEach;
