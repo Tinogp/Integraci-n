@@ -2,10 +2,7 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  *

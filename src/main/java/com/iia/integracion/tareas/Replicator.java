@@ -2,7 +2,6 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
-import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
 

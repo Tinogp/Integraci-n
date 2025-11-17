@@ -23,8 +23,11 @@ import org.w3c.dom.Document;
  */
 public class Translator extends Tarea {
 
+    private String xpathExpression;
+
     public Translator(List<Slot> entradas, List<Slot> salidas, String xsltFilePath) {
-        super(entradas, salidas, xsltFilePath);
+        super(entradas, salidas);
+        this.xpathExpression = xsltFilePath;
     }
 
     @Override

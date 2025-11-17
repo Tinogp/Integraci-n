@@ -32,6 +32,14 @@ public class Mensaje {
         this.cuerpo = cuerpo;
     }
 
+    public Mensaje(Mensaje otro) {
+        this.id = otro.id;
+        this.idCorrelator = otro.idCorrelator;
+        this.idFragment = otro.idFragment;
+        this.tamano = otro.tamano;
+        this.cuerpo = otro.cuerpo;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -95,7 +103,7 @@ public class Mensaje {
         return "Mensaje{"
                 + "id=" + id
                 + ", idCorrelator=" + idCorrelator
-                + ", cuerpo=" + cuerpoStr
+                + ", cuerpo=\n" + cuerpoStr
                 + '}';
     }
 }

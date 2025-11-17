@@ -4,7 +4,6 @@
  */
 package com.iia.integracion.model.conector;
 
-import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
 import org.junit.jupiter.api.AfterEach;
@@ -47,7 +46,6 @@ public class ConectorBXTest {
         System.out.println("ejecuta");
         ConectorBX instance = new ConectorBX(new PuertoEntrada(new Slot()), "");
         instance.ejecuta();
-        // TODO review the generated test code and remove the default call to fail.
         assertTrue(true);
     }
     

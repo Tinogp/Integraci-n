@@ -35,7 +35,8 @@ public class DistributorTest {
     private Mensaje mensajeCaliente;
     private Mensaje mensajeFrio;
     
-    private static final String XPATH_HOT = "drink/type = 'cold'";
+    private static final String XPATH_HOT = "drink/type = 'hot'";
+    private static final String XPATH_COLD = "drink/type = 'cold'";
     
     private Document crearDocumentoDesdeString(String xmlString) {
         try {
@@ -54,7 +55,7 @@ public class DistributorTest {
         salidaCaliente = new Slot();
         salidaFria = new Slot();
         
-        distributor = new Distributor(List.of(entrada), List.of(salidaCaliente, salidaFria), XPATH_HOT);
+        distributor = new Distributor(List.of(entrada), List.of(salidaCaliente, salidaFria), List.of(XPATH_HOT, XPATH_COLD));
         
         Document docCaliente = crearDocumentoDesdeString("<drink><name>cafe</name><type>hot</type></drink>");
         mensajeCaliente = new Mensaje(docCaliente);

@@ -1,0 +1,5 @@
+{
+    "java.dependency.packagePresentation": "hierarchical",
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.dependency.syncWithFolderExplorer": true
+}

@@ -8,7 +8,6 @@ import com.iia.integracion.model.conector.ConectorComanda;
 import com.iia.integracion.model.puerto.Puerto;
 import com.iia.integracion.model.puerto.PuertoEntrada;
 import com.iia.integracion.model.slot.Slot;
-import com.iia.integracion.tareas.Splitter;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -42,7 +41,6 @@ public class SplitterTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
     // @Test
@@ -57,7 +55,6 @@ public class SplitterTest {
 
         Splitter splitter = new Splitter(List.of(entrada), List.of(salida), "/pedido/items/item");
         splitter.ejecuta();
-        
 
         assertEquals(3, salida.numMensajes());
     }

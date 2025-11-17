@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ConectorCamareroTest {
 
-    private static final String RUTA_BASE = "src/test/java/com/iia/integracion/model/conector/Pruebas/";
-
     public ConectorCamareroTest() {
     }
 
@@ -56,7 +54,6 @@ public class ConectorCamareroTest {
         ConectorCamarero conectrocamarero = new ConectorCamarero(ps, st.concat("\\SALIDA.xml"));
         conectorcomanda.ejecuta();
         conectrocamarero.ejecuta();
-        // TODO review the generated test code and remove the default call to fail.
         File fe = new File("src\\test\\java\\com\\iia\\integracion\\model\\conector\\Pruebas\\comanda1.xml");
         File fs = new File("src\\test\\java\\com\\iia\\integracion\\model\\conector\\Pruebas\\SALIDA.xml");
         String en = null, sa = null;

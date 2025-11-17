@@ -28,7 +28,23 @@ public class ConectorCamarero extends Conector {
         } else {
             System.err.println("Error en el tipo del puerto entrada en conector camarero...");
         }
-        exportarDocumento(msg.getCuerpo(), Polling);
+
+        ////// CAMBIOS //////
+        
+        if(msg != null && msg.getCuerpo() != null){
+
+            File directorio = new File(Polling);
+            if(!directorio.exists()){
+                directorio.mkdirs(); // Crear el directorio si no existe
+            }
+
+            //Archivo con el nombre del ID del mensaje
+            String nombreArchivo = Polling + "/comanda_" + msg.getId().toString() + ".xml";
+            
+            File archivoSalida = new File(directorio, nombreArchivo);
+
+            exportarDocumento(msg.getCuerpo(), archivoSalida.getAbsolutePath());
+        }                
     }
     
     public void exportarDocumento(Document documento, String rutaArchivo) {

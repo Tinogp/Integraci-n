@@ -16,14 +16,12 @@ public class PuertoSolicitud extends Puerto {
         this.slotSalida = slotSalida;
     }
 
-
     public void ejecutaEscritura(Mensaje mensaje) {
-        slot.escribirSlot(mensaje);
+        slotSalida.escribirSlot(mensaje);
     }
 
-   
     public Mensaje ejecutaLectura() {
-        return slotSalida.leerSlot();
+        return slot.leerSlot();
     }
 
 }
