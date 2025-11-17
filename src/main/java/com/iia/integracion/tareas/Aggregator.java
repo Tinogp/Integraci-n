@@ -10,9 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -22,8 +21,7 @@ import org.w3c.dom.Node;
  */
 public class Aggregator extends Tarea {
 
-
-    private Map<UUID, List<Mensaje>> mapaFragmentos; //asocia los fragmentos al mensaje original   
+    private Map<UUID, List<Mensaje>> mapaFragmentos; // asocia los fragmentos al mensaje original
 
     private String xpathExpression;
 
@@ -36,24 +34,26 @@ public class Aggregator extends Tarea {
 
     @Override
     public void ejecuta() {
-        
-        Mensaje msg = entradas.getFirst().leerSlot();
+        while (entradas.getFirst().numMensajes() > 0) {
 
-        UUID idMsg = msg.getId();
+            Mensaje msg = entradas.getFirst().leerSlot();
 
-        // Almacenar el fragmento
-        List<Mensaje> listaFrag = mapaFragmentos.computeIfAbsent(idMsg, k -> new ArrayList<>());
-        listaFrag.add(msg);
+            UUID idMsg = msg.getId();
 
-        if (listaFrag.size() == msg.getTamano()) {            
-            
-            Document infoCompleta = unirFragmentos(listaFrag, this.xpathExpression, idMsg);
+            // Almacenar el fragmento
+            List<Mensaje> listaFrag = mapaFragmentos.computeIfAbsent(idMsg, k -> new ArrayList<>());
+            listaFrag.add(msg);
 
-            Mensaje msgFinal = new Mensaje(infoCompleta, idMsg);
+            if (listaFrag.size() == msg.getTamano()) {
 
-            salidas.getFirst().escribirSlot(msgFinal);
+                Document infoCompleta = unirFragmentos(listaFrag, this.xpathExpression);
 
-            mapaFragmentos.remove(idMsg);
+                Mensaje msgFinal = new Mensaje(infoCompleta, idMsg);
+
+                salidas.getFirst().escribirSlot(msgFinal);
+
+                mapaFragmentos.remove(idMsg);
+            }
         }
     }
 
@@ -61,37 +61,27 @@ public class Aggregator extends Tarea {
      * Crea un nuevo documento XML con los fragmentos de la lista.
      *
      * @param fragmentos Lista de fragmentos
-     * @param xpath Nombre del elemento raíz del nuevo documento.
+     * @param xpath      Nombre del elemento raíz del nuevo documento.
      * @return El Documento XML completo
      */
-    private Document unirFragmentos(List<Mensaje> fragmentos, String raíz, UUID id) {
-
+    private Document unirFragmentos(List<Mensaje> fragmentos, String xpath) {
+        // Introducir fragmentos en el documento original
+        Document docOriginal = ComandasSingleton.getOrder(fragmentos.get(0).getId());
+        // moverse al nodo donde se van a insertar los fragmentos a partir del
+        // xpathExpression
+        XPath xPath = javax.xml.xpath.XPathFactory.newInstance().newXPath();
+        Node NodoBuscado = null;
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            Document nuevoDoc = builder.newDocument();
-            Node raiz = nuevoDoc.createElement(raíz);
-            nuevoDoc.appendChild(raiz);
-
-            Node orderId = nuevoDoc.createElement("order_id");
-            orderId.setTextContent(ComandasSingleton.getOrder(id));
-            raiz.appendChild(orderId);
-
-            Node drinks = nuevoDoc.createElement("drinks");
-            raiz.appendChild(drinks);
-
-            for (Mensaje fragmento : fragmentos) {
-                Node raizFrag = fragmento.getCuerpo().getDocumentElement();
-                Node nodoimport = nuevoDoc.importNode(raizFrag, true);
-                drinks.appendChild(nodoimport);
-            }
-
-            return nuevoDoc;
-
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Aggregator.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            NodoBuscado = (Node) xPath.evaluate(xpath, docOriginal, javax.xml.xpath.XPathConstants.NODE);
+        } catch (Exception ex) {
+            Logger.getLogger(Aggregator.class.getName())
+                    .log(Level.SEVERE, null, ex);
         }
+
+        for (Mensaje frag : fragmentos) {
+            Node nodoFrag = docOriginal.importNode(frag.getCuerpo().getDocumentElement(), true);
+            NodoBuscado.appendChild(nodoFrag);
+        }
+        return docOriginal;
     }
 }

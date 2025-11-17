@@ -43,7 +43,7 @@ public class Integracion {
         ConectorComanda comandas = new ConectorComanda(puertoe, ".\\Comandas");
         ConectorBX bf = new ConectorBX(puertoSolbf, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
         ConectorBX bc = new ConectorBX(puertoSolbc, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
-        ConectorCamarero camarero = new ConectorCamarero(puertoSal, "/entregas/camarero.xml");
+        ConectorCamarero camarero = new ConectorCamarero(puertoSal, "entregas/camarero.xml");
 
 
         // Declaracion de tareas
@@ -58,7 +58,7 @@ public class Integracion {
         Enricher enbf = new Enricher(List.of(corrEnbf1, corrEnbf2), List.of(enMerbf));
         Enricher enbc = new Enricher(List.of(corrEnbc1, corrEnbc2), List.of(enMerbc));
         Merger mer = new Merger(List.of(enMerbf, enMerbc), List.of(merAgg));
-        Aggregator agg = new Aggregator(List.of(merAgg), List.of(salida), "cafe_order");
+        Aggregator agg = new Aggregator(List.of(merAgg), List.of(salida), "//drinks");
 
         // Ejecucion del sistema de integracion
         /**
@@ -165,6 +165,7 @@ public class Integracion {
                     // Ejecuta todo en el orden definido originalmente
                     comandas.ejecuta();
                     spl.ejecuta();
+                    dis.ejecuta();
                     dis.ejecuta();
                     repbf.ejecuta();
                     repbc.ejecuta();
