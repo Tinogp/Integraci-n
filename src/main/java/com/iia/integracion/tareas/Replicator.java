@@ -3,7 +3,6 @@ package com.iia.integracion.tareas;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
-import org.w3c.dom.Document;
 
 /**
  *
@@ -37,14 +36,11 @@ public class Replicator extends Tarea {
 
         if (mensajeOriginal != null) {
             
-            Document cuerpoOriginal = mensajeOriginal.getCuerpo();
-            
             for (int i = 0; i < salidas.size(); i++) {
                 
                 Slot salida = this.salidas.get(i);
                 
-                Mensaje mensaje = new Mensaje(cuerpoOriginal);
-                mensaje.setIdCorrelator(mensajeOriginal.getId());
+                Mensaje mensaje = new Mensaje(mensajeOriginal);
                 
                 salida.escribirSlot(mensaje);
                 

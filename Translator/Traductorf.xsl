@@ -6,7 +6,7 @@
         <sql>
             Select  * 
             from frias 
-            where nombre="<xsl:value-of select="//name"/>"
+            where nombre="<xsl:value-of select="//nombre"/>"
     </sql>
 </xsl:template>
 
