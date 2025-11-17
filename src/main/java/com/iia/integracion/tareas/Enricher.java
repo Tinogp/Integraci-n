@@ -3,7 +3,6 @@ package com.iia.integracion.tareas;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 import java.util.List;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,10 +19,10 @@ public class Enricher extends Tarea {
 
     @Override
     public void ejecuta() {
-        Document mensajeBase = entradas.get(0).leerSlot().getCuerpo();
-        Document mensajeEnriquecimiento = entradas.get(1).leerSlot().getCuerpo();
+        Mensaje mensajeBase = entradas.get(0).leerSlot();
+        Mensaje mensajeEnriquecimiento = entradas.get(1).leerSlot();
 
-        fusionarNodos(mensajeBase.getDocumentElement(), mensajeEnriquecimiento.getDocumentElement());
+        fusionarNodos(mensajeBase.getCuerpo().getDocumentElement(), mensajeEnriquecimiento.getCuerpo().getDocumentElement());
 
         Mensaje mensajeSalida = new Mensaje(mensajeBase);
         //System.out.println(mensajeSalida);

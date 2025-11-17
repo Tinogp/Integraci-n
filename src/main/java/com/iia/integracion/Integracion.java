@@ -53,8 +53,8 @@ public class Integracion {
         Replicator repbc = new Replicator(List.of(disRepbc), List.of(repTransbc, repCorrbc));
         Translator transbf = new Translator(List.of(repTransbf), List.of(transPuerbf), "Translator/Traductorf.xsl"); //mirar archivo
         Translator transbc = new Translator(List.of(repTransbc), List.of(transPuerbc), "Translator/Traductorc.xsl");
-        Correlator corrbf = new Correlator(List.of(repCorrbf, puerCorrbf), List.of(corrEnbf1, corrEnbf2), "/drink/id");
-        Correlator corrbc = new Correlator(List.of(repCorrbc, puerCorrbc), List.of(corrEnbc1, corrEnbc2), "/drink/id");
+        Correlator corrbf = new Correlator(List.of(repCorrbf, puerCorrbf), List.of(corrEnbf1, corrEnbf2), "//nombre");
+        Correlator corrbc = new Correlator(List.of(repCorrbc, puerCorrbc), List.of(corrEnbc1, corrEnbc2), "//nombre");
         Enricher enbf = new Enricher(List.of(corrEnbf1, corrEnbf2), List.of(enMerbf));
         Enricher enbc = new Enricher(List.of(corrEnbc1, corrEnbc2), List.of(enMerbc));
         Merger mer = new Merger(List.of(enMerbf, enMerbc), List.of(merAgg));
@@ -136,22 +136,22 @@ public class Integracion {
                     //break;
                 case 8:
                     bf.ejecuta();
-                    break;
+                    //break;
                 case 9:
                     bc.ejecuta();
-                    break;
+                   //break;
                 case 10:
                     corrbf.ejecuta();
-                    break;
+                    //break;
                 case 11:
                     corrbc.ejecuta();
-                    break;
+                    //break;
                 case 12:
                     enbf.ejecuta();
-                    break;
+                    //break;
                 case 13:
                     enbc.ejecuta();
-                    break;
+                    //break;
                 case 14:
                     mer.ejecuta();
                     break;

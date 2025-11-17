@@ -33,11 +33,21 @@ public class Mensaje {
     }
 
     public Mensaje(Mensaje otro) {
-        this.id = otro.id;
-        this.idCorrelator = otro.idCorrelator;
-        this.idFragment = otro.idFragment;
+        this.id = UUID.fromString(otro.id.toString());
+        // Comprobar si idCorrelator es null antes de clonar
+        if (otro.idCorrelator != null)
+            this.idCorrelator = UUID.fromString(otro.idCorrelator.toString());
+        else
+            this.idCorrelator = null;
+        // Comprobar si idFragment es null antes de clonar
+        if (otro.idFragment != null)
+            this.idFragment = UUID.fromString(otro.idFragment.toString());
+        else
+            this.idFragment = null;
         this.tamano = otro.tamano;
-        this.cuerpo = otro.cuerpo;
+        // Clonar el Document para evitar referencias compartidas
+        this.cuerpo = otro.getCuerpo().cloneNode(true) instanceof Document ? (Document) otro.getCuerpo().cloneNode(true)
+                : null;
     }
 
     public UUID getId() {
