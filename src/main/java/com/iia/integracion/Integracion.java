@@ -102,6 +102,7 @@ public class Integracion {
             System.out.println("15  - Aggregator");
             System.out.println("16  - Conector Camarero");
             System.out.println("17  - Ejecutar todo en secuencia");
+            System.out.println("18  - Ejecutar todo en secuencia con IdSetter");
             System.out.println(" 0  - Salir");
             System.out.print("Opción: ");
 
@@ -115,44 +116,44 @@ public class Integracion {
             switch (opcion) {
                 case 1:
                     comandas.ejecuta();
-                    //break;
+                    break;
                 case 2:
                     spl.ejecuta();
-                    //break;
+                    break;
                 case 3:
                     dis.ejecuta();
                     dis.ejecuta();
-                    //break;
+                    break;
                 case 4:
                     repbf.ejecuta();
-                    //break;
+                    break;
                 case 5:
                     repbc.ejecuta();
-                    //break;
+                    break;
                 case 6:
                     transbf.ejecuta();
-                    //break;
+                    break;
                 case 7:
                     transbc.ejecuta();
-                    //break;
+                    break;
                 case 8:
                     bf.ejecuta();
-                    //break;
+                    break;
                 case 9:
                     bc.ejecuta();
-                   //break;
+                   break;
                 case 10:
                     corrbf.ejecuta();
-                    //break;
+                    break;
                 case 11:
                     corrbc.ejecuta();
-                    //break;
+                    break;
                 case 12:
                     enbf.ejecuta();
-                    //break;
+                    break;
                 case 13:
                     enbc.ejecuta();
-                    //break;
+                    break;
                 case 14:
                     mer.ejecuta();
                     break;
