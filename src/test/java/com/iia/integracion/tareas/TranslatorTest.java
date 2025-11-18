@@ -30,7 +30,6 @@ public class TranslatorTest {
     // --- Metadatos de prueba (Todos UUIDs) ---
     private static final UUID ID_MENSAJE_ENTRADA = UUID.randomUUID();
     private static final UUID ID_CORRELATOR = UUID.randomUUID();
-    private static final UUID ID_FRAGMENTO = UUID.randomUUID();
 
     @Test
     void testEjecutaTraduccionYPropagaMetadatosFragmento() throws Exception {
@@ -46,7 +45,7 @@ public class TranslatorTest {
         // Establecer los metadatos (UUIDs)
         msgEntrada.setId(ID_MENSAJE_ENTRADA);
         msgEntrada.setIdCorrelator(ID_CORRELATOR);
-        msgEntrada.setIdFragment(ID_FRAGMENTO); // Usando UUID
+        msgEntrada.setIdFragment((long) 1); // Usando UUID
 
         entrada.escribirSlot(msgEntrada);
 
@@ -84,7 +83,7 @@ public class TranslatorTest {
         assertEquals(ID_CORRELATOR, msgSalida.getIdCorrelator(),
                 "El ID Correlator no fue propagado correctamente.");
 
-        assertEquals(ID_FRAGMENTO, msgSalida.getIdFragment(),
+        assertEquals((long) 1, msgSalida.getIdFragment(),
                 "El ID del Fragmento no fue propagado correctamente (UUID).");
     }
 

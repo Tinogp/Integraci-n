@@ -47,7 +47,8 @@ public class Integracion {
 
 
         // Declaracion de tareas
-        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");            
+        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");       
+        IdSetter idSetter = new IdSetter(List.of(splDis), List.of(splDis));     
         Distributor dis = new Distributor(List.of(splDis), List.of(disRepbf, disRepbc), List.of("drink/type = 'cold'", "drink/type = 'hot'"));        
         Replicator repbf = new Replicator(List.of(disRepbf), List.of(repTransbf, repCorrbf));
         Replicator repbc = new Replicator(List.of(disRepbc), List.of(repTransbc, repCorrbc));
@@ -181,6 +182,26 @@ public class Integracion {
                     agg.ejecuta();
                     camarero.ejecuta();
                     break;
+                case 18:
+                    // Ejecuta todo en el orden definido originalmente con idSetter
+                    comandas.ejecuta();
+                    spl.ejecuta();
+                    idSetter.ejecuta();
+                    dis.ejecuta();
+                    dis.ejecuta();
+                    repbf.ejecuta();
+                    repbc.ejecuta();
+                    transbf.ejecuta();
+                    transbc.ejecuta();
+                    bf.ejecuta();
+                    bc.ejecuta();
+                    corrbf.ejecuta();
+                    corrbc.ejecuta();
+                    enbf.ejecuta();
+                    enbc.ejecuta();
+                    mer.ejecuta();
+                    agg.ejecuta();
+                    camarero.ejecuta();
                 case 0:
                     System.out.println("Saliendo...");
                     break;
