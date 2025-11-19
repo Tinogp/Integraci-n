@@ -13,7 +13,7 @@ public class Mensaje {
 
     private UUID id;
     private UUID idCorrelator;
-    private UUID idFragment;
+    private Long idFragment;
     private int tamano;
 
     protected Document cuerpo;
@@ -39,11 +39,7 @@ public class Mensaje {
             this.idCorrelator = UUID.fromString(otro.idCorrelator.toString());
         else
             this.idCorrelator = null;
-        // Comprobar si idFragment es null antes de clonar
-        if (otro.idFragment != null)
-            this.idFragment = UUID.fromString(otro.idFragment.toString());
-        else
-            this.idFragment = null;
+        this.idFragment = otro.idFragment;
         this.tamano = otro.tamano;
         // Clonar el Document para evitar referencias compartidas
         this.cuerpo = otro.getCuerpo().cloneNode(true) instanceof Document ? (Document) otro.getCuerpo().cloneNode(true)
@@ -74,11 +70,11 @@ public class Mensaje {
         this.cuerpo = cuerpo;
     }
 
-    public UUID getIdFragment() {
+    public Long getIdFragment() {
         return idFragment;
     }
 
-    public void setIdFragment(UUID idFragment) {
+    public void setIdFragment(Long idFragment) {
         this.idFragment = idFragment;
     }
 

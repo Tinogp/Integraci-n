@@ -43,11 +43,12 @@ public class Integracion {
         ConectorComanda comandas = new ConectorComanda(puertoe, ".\\Comandas");
         ConectorBX bf = new ConectorBX(puertoSolbf, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
         ConectorBX bc = new ConectorBX(puertoSolbc, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
-        ConectorCamarero camarero = new ConectorCamarero(puertoSal, "/entregas/camarero.xml");
+        ConectorCamarero camarero = new ConectorCamarero(puertoSal, "entregas/camarero.xml");
 
 
         // Declaracion de tareas
-        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");            
+        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");       
+        IdSetter idSetter = new IdSetter(List.of(splDis), List.of(splDis));     
         Distributor dis = new Distributor(List.of(splDis), List.of(disRepbf, disRepbc), List.of("drink/type = 'cold'", "drink/type = 'hot'"));        
         Replicator repbf = new Replicator(List.of(disRepbf), List.of(repTransbf, repCorrbf));
         Replicator repbc = new Replicator(List.of(disRepbc), List.of(repTransbc, repCorrbc));
@@ -58,7 +59,7 @@ public class Integracion {
         Enricher enbf = new Enricher(List.of(corrEnbf1, corrEnbf2), List.of(enMerbf));
         Enricher enbc = new Enricher(List.of(corrEnbc1, corrEnbc2), List.of(enMerbc));
         Merger mer = new Merger(List.of(enMerbf, enMerbc), List.of(merAgg));
-        Aggregator agg = new Aggregator(List.of(merAgg), List.of(salida), "cafe_order");
+        Aggregator agg = new Aggregator(List.of(merAgg), List.of(salida), "//drinks");
 
         // Ejecucion del sistema de integracion
         /**
@@ -101,6 +102,7 @@ public class Integracion {
             System.out.println("15  - Aggregator");
             System.out.println("16  - Conector Camarero");
             System.out.println("17  - Ejecutar todo en secuencia");
+            System.out.println("18  - Ejecutar todo en secuencia con IdSetter");
             System.out.println(" 0  - Salir");
             System.out.print("Opción: ");
 
@@ -114,44 +116,44 @@ public class Integracion {
             switch (opcion) {
                 case 1:
                     comandas.ejecuta();
-                    //break;
+                    break;
                 case 2:
                     spl.ejecuta();
-                    //break;
+                    break;
                 case 3:
                     dis.ejecuta();
                     dis.ejecuta();
-                    //break;
+                    break;
                 case 4:
                     repbf.ejecuta();
-                    //break;
+                    break;
                 case 5:
                     repbc.ejecuta();
-                    //break;
+                    break;
                 case 6:
                     transbf.ejecuta();
-                    //break;
+                    break;
                 case 7:
                     transbc.ejecuta();
-                    //break;
+                    break;
                 case 8:
                     bf.ejecuta();
-                    //break;
+                    break;
                 case 9:
                     bc.ejecuta();
-                   //break;
+                   break;
                 case 10:
                     corrbf.ejecuta();
-                    //break;
+                    break;
                 case 11:
                     corrbc.ejecuta();
-                    //break;
+                    break;
                 case 12:
                     enbf.ejecuta();
-                    //break;
+                    break;
                 case 13:
                     enbc.ejecuta();
-                    //break;
+                    break;
                 case 14:
                     mer.ejecuta();
                     break;
@@ -166,6 +168,7 @@ public class Integracion {
                     comandas.ejecuta();
                     spl.ejecuta();
                     dis.ejecuta();
+                    dis.ejecuta();
                     repbf.ejecuta();
                     repbc.ejecuta();
                     transbf.ejecuta();
@@ -180,6 +183,26 @@ public class Integracion {
                     agg.ejecuta();
                     camarero.ejecuta();
                     break;
+                case 18:
+                    // Ejecuta todo en el orden definido originalmente con idSetter
+                    comandas.ejecuta();
+                    spl.ejecuta();
+                    idSetter.ejecuta();
+                    dis.ejecuta();
+                    dis.ejecuta();
+                    repbf.ejecuta();
+                    repbc.ejecuta();
+                    transbf.ejecuta();
+                    transbc.ejecuta();
+                    bf.ejecuta();
+                    bc.ejecuta();
+                    corrbf.ejecuta();
+                    corrbc.ejecuta();
+                    enbf.ejecuta();
+                    enbc.ejecuta();
+                    mer.ejecuta();
+                    agg.ejecuta();
+                    camarero.ejecuta();
                 case 0:
                     System.out.println("Saliendo...");
                     break;
