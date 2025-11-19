@@ -34,7 +34,8 @@ public class ConectorCamarero extends Conector {
         if (msg != null && msg.getCuerpo() != null) {
 
             File archivoSalida = new File(Polling);
-
+            if (archivoSalida.exists())
+                archivoSalida.delete(); // Eliminar el archivo si ya existe
             exportarDocumento(msg.getCuerpo(), archivoSalida.getAbsolutePath());
         }
     }

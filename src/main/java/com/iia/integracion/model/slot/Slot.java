@@ -36,7 +36,19 @@ public class Slot {
         return mensaje;
     }
 
+    public void eliminarListaMensajes(List<Mensaje> listaMensajes) {
+        estrategiaAcceso.acceder(listaMensajes);
+    }
+
     public int numMensajes() {
         return buff.size();
+    }
+
+    public List<Mensaje> getBuff() {
+        if(estrategiaAcceso instanceof StrategyCopiaBuff) {
+            return ((StrategyCopiaBuff) estrategiaAcceso).copiarBuff(buff);
+        } else {
+            return new ArrayList<>(buff);
+        }
     }
 }

@@ -1,16 +1,20 @@
 package com.iia.integracion;
 
+import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import com.iia.integracion.model.conector.*;
 import com.iia.integracion.model.puerto.*;
 import com.iia.integracion.model.slot.Slot;
 import com.iia.integracion.tareas.*;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Integracion {
 
     public static void main(String[] args) {
 
+        
         // Declaracion de Slots
         Slot poll = new Slot();
         Slot splDis = new Slot();
@@ -80,7 +84,7 @@ public class Integracion {
         agg.ejecuta();
         camarero.ejecuta();  **/
         
-       // Menú interactivo para ejecutar pasos
+        //Menú interactivo para ejecutar pasos
         Scanner scanner = new Scanner(System.in);
         int opcion = -1;
         while (opcion != 0) {
@@ -212,6 +216,11 @@ public class Integracion {
         }
 
         scanner.close();
+        
+        /* TODO:
+        // Declaracion de ThreadPool para ejecucion concurrente de tareas
+        ExecutorService threadPool = Executors.newFixedThreadPool(5);*/
+
     }
                 
 

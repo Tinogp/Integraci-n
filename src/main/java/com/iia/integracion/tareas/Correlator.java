@@ -2,6 +2,8 @@ package com.iia.integracion.tareas;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
+import com.iia.integracion.model.slot.StrategyCopiaBuff;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +30,19 @@ public class Correlator extends Tarea {
         this.xpathExpression = xpath;
         mensajesEntrantesCorelator = new HashMap<>();
         mensajesEntrantesSinCorrelator = new HashMap<>();
+        for (Slot s : entradas) {
+            s.setStrategy(new StrategyCopiaBuff());
+        }
     }
 
     @Override
     public void ejecuta() {
+
+        ArrayList<Mensaje> listasMensajes;
         for (Slot s : entradas) {
-            relaciona(s.leerSlot());
+            List<Mensaje> scb = s.getBuff();
         }
+       
     }
 
     public void relaciona(Mensaje msg) {
@@ -70,28 +78,28 @@ public class Correlator extends Tarea {
             Node node = (Node) xpath.evaluate(xpathExpression, msg.getCuerpo(), XPathConstants.NODE);
 
             if (node == null) {
-                //System.out.println("No se encontró nodo con XPath: " + xpathExpression);
+                // System.out.println("No se encontró nodo con XPath: " + xpathExpression);
                 return;
             }
             String valor = node.getTextContent();
             if (valor == null || valor.trim().isEmpty()) {
-                //System.out.println("Nodo vacío con XPath: " + xpathExpression);
+                // System.out.println("Nodo vacío con XPath: " + xpathExpression);
                 return;
             }
 
-            //System.out.println("Valor para correlación: " + valor);
+            // System.out.println("Valor para correlación: " + valor);
             if (mensajesEntrantesSinCorrelator.containsKey(valor)) {
                 List<Mensaje> listMensaje = mensajesEntrantesSinCorrelator.get(valor);
                 listMensaje.add(msg);
                 if (mensajesEntrantesSinCorrelator.get(valor).size() == salidas.size()) {
                     escribirSalidas(listMensaje);
                 }
-                //System.out.println("Pareja encontrada por valor: " + valor);
+                // System.out.println("Pareja encontrada por valor: " + valor);
             } else {
                 List<Mensaje> nuevaLista = new ArrayList<>();
                 nuevaLista.add(msg);
                 mensajesEntrantesSinCorrelator.put(valor, nuevaLista);
-                //System.out.println("Mensaje guardado esperando pareja con valor: " + valor);
+                // System.out.println("Mensaje guardado esperando pareja con valor: " + valor);
             }
         } catch (XPathExpressionException x) {
             System.err.println("Error en expresión XPath: " + xpathExpression);
@@ -105,4 +113,5 @@ public class Correlator extends Tarea {
         }
         mensajesEntrantesCorelator.remove(listMensaje.getFirst().getIdCorrelator());
     }
+
 }
