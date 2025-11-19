@@ -3,6 +3,8 @@ package com.iia.integracion.tareas;
 import com.iia.integracion.model.ComandasSingleton;
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
+import com.iia.integracion.model.slot.StrategyCopiaBuff;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,19 +32,20 @@ public class Aggregator extends Tarea {
         this.xpathExpression = xpath;
 
         this.mapaFragmentos = new HashMap<>();
+            entradas.getFirst().setStrategy(new StrategyCopiaBuff());       
     }
 
     @Override
     public void ejecuta() {
-        while (entradas.getFirst().numMensajes() > 0) {
-
-            Mensaje msg = entradas.getFirst().leerSlot();
-
+        List<Mensaje> listaMensajes=entradas.getFirst().getBuff();
+        for (Mensaje msg:listaMensajes) {
             UUID idMsg = msg.getId();
 
             // Almacenar el fragmento
             List<Mensaje> listaFrag = mapaFragmentos.computeIfAbsent(idMsg, k -> new ArrayList<>());
-            listaFrag.add(msg);
+            if(!listaFrag.contains(msg)){
+                listaFrag.add(msg);
+            }
 
             if (listaFrag.size() == msg.getTamano()) {
 
@@ -51,7 +54,7 @@ public class Aggregator extends Tarea {
                 Mensaje msgFinal = new Mensaje(infoCompleta, idMsg);
 
                 salidas.getFirst().escribirSlot(msgFinal);
-
+                entradas.getFirst().eliminarListaMensajes(List.of(msg));
                 mapaFragmentos.remove(idMsg);
             }
         }
