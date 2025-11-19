@@ -37,12 +37,13 @@ public class Correlator extends Tarea {
 
     @Override
     public void ejecuta() {
-
         ArrayList<Mensaje> listasMensajes;
         for (Slot s : entradas) {
             List<Mensaje> scb = s.getBuff();
+            for( Mensaje m : scb ) {
+                relaciona(m);
+            }
         }
-       
     }
 
     public void relaciona(Mensaje msg) {
@@ -60,7 +61,9 @@ public class Correlator extends Tarea {
     public void relacionaPorId(Mensaje msg) {
         if (mensajesEntrantesCorelator.containsKey(msg.getIdCorrelator())) {
             List<Mensaje> listMensaje = mensajesEntrantesCorelator.get(msg.getIdCorrelator());
-            listMensaje.add(msg);
+            if (!listMensaje.contains(msg)) {
+                listMensaje.add(msg);
+            }
             if (mensajesEntrantesCorelator.get(msg.getIdCorrelator()).size() == salidas.size()) {
                 escribirSalidas(listMensaje);
             }
@@ -90,7 +93,9 @@ public class Correlator extends Tarea {
             // System.out.println("Valor para correlación: " + valor);
             if (mensajesEntrantesSinCorrelator.containsKey(valor)) {
                 List<Mensaje> listMensaje = mensajesEntrantesSinCorrelator.get(valor);
-                listMensaje.add(msg);
+                if (!listMensaje.contains(msg)) {
+                    listMensaje.add(msg);
+                }
                 if (mensajesEntrantesSinCorrelator.get(valor).size() == salidas.size()) {
                     escribirSalidas(listMensaje);
                 }
@@ -112,6 +117,9 @@ public class Correlator extends Tarea {
             salidas.get(i).escribirSlot(listMensaje.get(i));
         }
         mensajesEntrantesCorelator.remove(listMensaje.getFirst().getIdCorrelator());
+        for(Slot s:entradas) {
+            s.eliminarListaMensajes(listMensaje);
+        }
     }
 
 }

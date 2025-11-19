@@ -46,7 +46,7 @@ public class Splitter extends Tarea {
                     fragmento.setId(idOriginal);
                     fragmento.setTamano(nodes.getLength());
                     fragmento.setIdFragment((long) (i + 1));
-                    // Eliminar el nodo del documento original usando su padre
+                    // Elimina el nodo del documento original usando su padre
                     Node parent = node.getParentNode();
                     if (parent != null) {
                         parent.removeChild(node);

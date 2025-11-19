@@ -37,7 +37,9 @@ public class Slot {
     }
 
     public void eliminarListaMensajes(List<Mensaje> listaMensajes) {
-        estrategiaAcceso.acceder(listaMensajes);
+        for (Mensaje m : listaMensajes) {
+            buff.remove(m);
+        }
     }
 
     public int numMensajes() {

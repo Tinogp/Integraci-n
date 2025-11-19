@@ -9,9 +9,6 @@ public class StrategyCopiaBuff implements StrategyAcceso {
 
     @Override
     public Mensaje acceder(List<Mensaje> buff) {
-        for (Mensaje m : buff) {
-            buff.remove(m);
-        }
         return null;
     }
 
