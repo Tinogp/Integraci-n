@@ -37,7 +37,6 @@ public class Correlator extends Tarea {
 
     @Override
     public void ejecuta() {
-        ArrayList<Mensaje> listasMensajes;
         for (Slot s : entradas) {
             List<Mensaje> scb = s.getBuff();
             for( Mensaje m : scb ) {
