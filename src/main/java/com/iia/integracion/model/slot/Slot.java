@@ -21,7 +21,7 @@ public class Slot {
     }
 
     public void setStrategy(StrategyAcceso nuevaEstrategia) {
-        System.out.println("\nCambio de estrategia\n");
+        System.out.println("\nCambio de estrategia, de " + estrategiaAcceso + " a " + nuevaEstrategia + "\n");
         this.estrategiaAcceso = nuevaEstrategia;
     }
 
