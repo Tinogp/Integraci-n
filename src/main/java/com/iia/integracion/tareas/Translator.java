@@ -31,47 +31,56 @@ public class Translator extends Tarea {
     }
 
     @Override
-    public void ejecuta() {
+    public void run() {
+
         if (entradas.isEmpty() || salidas.isEmpty() || xpathExpression == null) {
             Logger.getLogger(Translator.class.getName()).log(Level.SEVERE,
                     "Configuración incompleta en translator: \n\tSlot de entrada/salida vacío o ruta XSLT no especificada.");
             return;
         }
 
-        try {
+        while(true) {           
             Mensaje msg = entradas.getFirst().leerSlot();
-            Document docEntrada = msg.getCuerpo();
 
-            TransformerFactory factory = TransformerFactory.newInstance();
+            if(msg == null) {
+                break;
+            }
 
-            StreamSource xslt = new StreamSource(new File(xpathExpression));
+            try { 
+                Document docEntrada = msg.getCuerpo();
 
-            Transformer transformer = factory.newTransformer(xslt);
+                TransformerFactory factory = TransformerFactory.newInstance();
 
-            DOMSource xmlSource = new DOMSource(docEntrada);
+                StreamSource xslt = new StreamSource(new File(xpathExpression));
 
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
+                Transformer transformer = factory.newTransformer(xslt);
 
-            transformer.transform(xmlSource, result);
+                DOMSource xmlSource = new DOMSource(docEntrada);
 
-            Document docSalida = convertStringToDocument(writer.toString());
+                StringWriter writer = new StringWriter();
+                StreamResult result = new StreamResult(writer);
 
-            Mensaje msgSalida;
-            msgSalida = new Mensaje(docSalida);
-            msgSalida.setIdFragment(msg.getIdFragment());
-            msgSalida.setId(msg.getId());
-            msgSalida.setIdCorrelator(msg.getIdCorrelator());
+                transformer.transform(xmlSource, result);
 
-            salidas.getFirst().escribirSlot(msgSalida);
+                Document docSalida = convertStringToDocument(writer.toString());
 
-        } catch (javax.xml.transform.TransformerException ex) {
-            Logger.getLogger(Translator.class.getName()).log(Level.SEVERE,
-                    "Error durante la transformación XSLT o el archivo XSLT es inválido.", ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Translator.class.getName()).log(Level.SEVERE,
-                    "Error al leer el Slot o convertir el resultado.", ex);
-        }
+                Mensaje msgSalida;
+                msgSalida = new Mensaje(docSalida);
+                msgSalida.setIdFragment(msg.getIdFragment());
+                msgSalida.setId(msg.getId());
+                msgSalida.setIdCorrelator(msg.getIdCorrelator());
+
+                salidas.getFirst().escribirSlot(msgSalida);
+
+            } catch (javax.xml.transform.TransformerException ex) {
+                Logger.getLogger(Translator.class.getName()).log(Level.SEVERE,
+                        "Error durante la transformación XSLT o el archivo XSLT es inválido.", ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Translator.class.getName()).log(Level.SEVERE,
+                        "Error al leer el Slot o convertir el resultado.", ex);
+            }
+        
+        } 
     }
 
     private Document convertStringToDocument(String xmlString) throws Exception {
@@ -79,5 +88,5 @@ public class Translator extends Tarea {
         javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();
         org.xml.sax.InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xmlString));
         return builder.parse(is);
-    }
+    }   
 }

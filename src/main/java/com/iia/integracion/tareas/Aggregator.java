@@ -33,10 +33,14 @@ public class Aggregator extends Tarea {
     }
 
     @Override
-    public void ejecuta() {
-        while (entradas.getFirst().numMensajes() > 0) {
+    public void run() {
+        while (true) {
 
             Mensaje msg = entradas.getFirst().leerSlot();
+
+            if() msg == null) {
+                break;
+            }
 
             UUID idMsg = msg.getId();
 
