@@ -3,13 +3,15 @@ package com.iia.integracion.model.slot;
 import com.iia.integracion.model.mensaje.Mensaje;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author tinog
  */
 public class Slot {
 
-    private final List<Mensaje> buff = new ArrayList<>();
+    private final BlockingQueue<Mensaje> buff = new LinkedBlockingQueue<>();
     private StrategyAcceso estrategiaAcceso;
 
     public Slot() {
@@ -27,7 +29,12 @@ public class Slot {
 
     public void escribirSlot(Mensaje mensaje) {
         System.out.println("Se esta escribiendo el mensaje: " + mensaje);
-        buff.add(mensaje);
+        try {
+            buff.put(mensaje);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Hilo interrumpido al escribir");
+        }
     }
 
     public Mensaje leerSlot() {
@@ -37,9 +44,7 @@ public class Slot {
     }
 
     public void eliminarListaMensajes(List<Mensaje> listaMensajes) {
-        for (Mensaje m : listaMensajes) {
-            buff.remove(m);
-        }
+        buff.removeAll(listaMensajes);
     }
 
     public int numMensajes() {
@@ -47,10 +52,10 @@ public class Slot {
     }
 
     public List<Mensaje> getBuff() {
-        if(estrategiaAcceso instanceof StrategyCopiaBuff) {
+        if (estrategiaAcceso instanceof StrategyCopiaBuff) {
             return ((StrategyCopiaBuff) estrategiaAcceso).copiarBuff(buff);
         } else {
-            return new ArrayList<>(buff);
+            return new ArrayList<>();
         }
     }
 }

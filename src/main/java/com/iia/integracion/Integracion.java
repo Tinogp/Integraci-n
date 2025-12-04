@@ -6,12 +6,10 @@ import com.iia.integracion.model.slot.Slot;
 import com.iia.integracion.tareas.*;
 import java.util.List;
 import java.util.Scanner;
-
 public class Integracion {
 
     public static void main(String[] args) {
 
-        
         // Declaracion de Slots
         Slot poll = new Slot();
         Slot splDis = new Slot();
@@ -21,10 +19,10 @@ public class Integracion {
         Slot repTransbc = new Slot();
         Slot repCorrbf = new Slot();
         Slot repCorrbc = new Slot();
-        Slot transPuerbf = new Slot(); 
-        Slot transPuerbc = new Slot(); 
+        Slot transPuerbf = new Slot();
+        Slot transPuerbc = new Slot();
         Slot puerCorrbf = new Slot();
-        Slot puerCorrbc = new Slot();        
+        Slot puerCorrbc = new Slot();
         Slot corrEnbf1 = new Slot();
         Slot corrEnbf2 = new Slot();
         Slot corrEnbc1 = new Slot();
@@ -46,14 +44,15 @@ public class Integracion {
         ConectorBX bc = new ConectorBX(puertoSolbc, "jdbc:mysql://tinovpn.duckdns.org:2025/bebidas");
         ConectorCamarero camarero = new ConectorCamarero(puertoSal, "entregas/camarero.xml");
 
-
         // Declaracion de tareas
-        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");       
-        IdSetter idSetter = new IdSetter(List.of(splDis), List.of(splDis));     
-        Distributor dis = new Distributor(List.of(splDis), List.of(disRepbf, disRepbc), List.of("drink/type = 'cold'", "drink/type = 'hot'"));        
+        Splitter spl = new Splitter(List.of(poll), List.of(splDis), "/cafe_order/drinks/drink");
+        IdSetter idSetter = new IdSetter(List.of(splDis), List.of(splDis));
+        Distributor dis = new Distributor(List.of(splDis), List.of(disRepbf, disRepbc),
+                List.of("drink/type = 'cold'", "drink/type = 'hot'"));
         Replicator repbf = new Replicator(List.of(disRepbf), List.of(repTransbf, repCorrbf));
         Replicator repbc = new Replicator(List.of(disRepbc), List.of(repTransbc, repCorrbc));
-        Translator transbf = new Translator(List.of(repTransbf), List.of(transPuerbf), "Translator/Traductorf.xsl"); //mirar archivo
+        Translator transbf = new Translator(List.of(repTransbf), List.of(transPuerbf), "Translator/Traductorf.xsl"); // mirar
+                                                                                                                     // archivo
         Translator transbc = new Translator(List.of(repTransbc), List.of(transPuerbc), "Translator/Traductorc.xsl");
         Correlator corrbf = new Correlator(List.of(repCorrbf, puerCorrbf), List.of(corrEnbf1, corrEnbf2), "//nombre");
         Correlator corrbc = new Correlator(List.of(repCorrbc, puerCorrbc), List.of(corrEnbc1, corrEnbc2), "//nombre");
@@ -64,24 +63,25 @@ public class Integracion {
 
         // Ejecucion del sistema de integracion
         /**
-        comandas.ejecuta();
-        spl.ejecuta();
-        dis.ejecuta();
-        repbf.ejecuta();
-        repbc.ejecuta();
-        transbf.ejecuta();        
-        transbc.ejecuta();
-        bf.ejecuta();
-        bc.ejecuta();
-        corrbf.ejecuta();
-        corrbc.ejecuta();
-        enbf.ejecuta();
-        enbc.ejecuta();
-        mer.ejecuta();
-        agg.ejecuta();
-        camarero.ejecuta();  **/
-        
-        //Menú interactivo para ejecutar pasos
+         * comandas.ejecuta();
+         * spl.ejecuta();
+         * dis.ejecuta();
+         * repbf.ejecuta();
+         * repbc.ejecuta();
+         * transbf.ejecuta();
+         * transbc.ejecuta();
+         * bf.ejecuta();
+         * bc.ejecuta();
+         * corrbf.ejecuta();
+         * corrbc.ejecuta();
+         * enbf.ejecuta();
+         * enbc.ejecuta();
+         * mer.ejecuta();
+         * agg.ejecuta();
+         * camarero.ejecuta();
+         **/
+
+        // Menú interactivo para ejecutar pasos
         Scanner scanner = new Scanner(System.in);
         int opcion = -1;
         while (opcion != 0) {
@@ -142,7 +142,7 @@ public class Integracion {
                     break;
                 case 9:
                     bc.ejecuta();
-                   break;
+                    break;
                 case 10:
                     corrbf.ejecuta();
                     break;
@@ -215,6 +215,5 @@ public class Integracion {
         scanner.close();
 
     }
-                
 
 }
