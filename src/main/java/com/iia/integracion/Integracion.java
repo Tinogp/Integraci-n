@@ -8,8 +8,10 @@ import com.iia.integracion.tareas.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Integracion {
 
@@ -239,12 +241,32 @@ public class Integracion {
                             // ORDENAR COLA POR PRIORIDAD DE MAYOR A MENOR
                             colaPrioridad.sort((tp1, tp2) -> Integer.compare(tp2.prioridad, tp1.prioridad));
 
-                            // EJECUTAR TAREAS EN ORDEN DE PRIORIDAD
-                            for (TareaPrioridad tp : colaPrioridad) {
-                                poolTareas.submit(tp.tarea);
-                            }
+                           int tareasALanzar = Math.min(colaPrioridad.size(), numHilosTareas);
 
-                            Thread.sleep(10);
+                            if (tareasALanzar > 0) {
+                                List<Future<?>> tareasEnEjecucion = new ArrayList<>();
+
+                                // 4. ENVIAR AL POOL Y GUARDAR EL "RECIBO" (FUTURE)
+                                for (int i = 0; i < tareasALanzar; i++) {
+                                    TareaPrioridad tp = colaPrioridad.get(i);
+                                    // .submit() devuelve un Future que representa la ejecución pendiente
+                                    Future<?> futuro = poolTareas.submit(tp.tarea);
+                                    tareasEnEjecucion.add(futuro);
+                                }
+
+                                // BLOQUEAR HASTA QUE TERMINEN
+                                for (Future<?> f : tareasEnEjecucion) {
+                                    try {                                        
+                                        f.get(); // se detiene este bucle while hasta que la tarea termina
+                                    } catch (ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                        
+                            } else {
+                                // Si no hay nada que hacer, dormir para no quemar CPU
+                                Thread.sleep(100);
+                            }
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();
