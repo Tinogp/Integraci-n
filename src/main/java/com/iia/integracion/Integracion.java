@@ -4,8 +4,13 @@ import com.iia.integracion.model.conector.*;
 import com.iia.integracion.model.puerto.*;
 import com.iia.integracion.model.slot.Slot;
 import com.iia.integracion.tareas.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Integracion {
 
     public static void main(String[] args) {
@@ -104,6 +109,7 @@ public class Integracion {
             System.out.println("16  - Conector Camarero");
             System.out.println("17  - Ejecutar todo en secuencia");
             System.out.println("18  - Ejecutar todo en secuencia con IdSetter");
+            System.out.println("19  - Ejecutar de forma concurrente");
             System.out.println(" 0  - Salir");
             System.out.print("Opción: ");
 
@@ -204,6 +210,47 @@ public class Integracion {
                     mer.ejecuta();
                     agg.ejecuta();
                     camarero.ejecuta();
+                case 19:
+
+                    ExecutorService poolConectores = Executors.newCachedThreadPool();
+                    poolConectores.submit(comandas);
+                    poolConectores.submit(bf);
+                    poolConectores.submit(bc);
+                    poolConectores.submit(camarero);
+
+                    int numHilosTareas = 4;
+                    ExecutorService poolTareas = Executors.newFixedThreadPool(numHilosTareas);
+                    List<Tarea> tareas = List.of(spl, dis, dis, repbf, repbc, transbf, transbc,
+                            corrbf, corrbc, enbf, enbc, mer, agg);
+
+                    while (true) {
+                        try {
+
+                            // CACULAR PRIORIDADES
+                            List<TareaPrioridad> colaPrioridad = new ArrayList<>();
+
+                            for (Tarea t : tareas) {
+                                int prioridad = calcularPrioridad(t);
+                                if (prioridad > 0) {
+                                    colaPrioridad.add(new TareaPrioridad(t, prioridad));
+                                }
+                            }
+
+                            // ORDENAR COLA POR PRIORIDAD DE MAYOR A MENOR
+                            colaPrioridad.sort((tp1, tp2) -> Integer.compare(tp2.prioridad, tp1.prioridad));
+
+                            // EJECUTAR TAREAS EN ORDEN DE PRIORIDAD
+                            for (TareaPrioridad tp : colaPrioridad) {
+                                poolTareas.submit(tp.tarea);
+                            }
+
+                            Thread.sleep(10);
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -214,13 +261,55 @@ public class Integracion {
 
         scanner.close();
 
+        // La politica pensada para la ejecucion de los hilos irá en función de la
+        // cantidad de mensajes que tengan las tareas en sus
+        // slots de entrada. Hay tareas que a pesar de tener muchos mensajes en un slot,
+        // si otro de ellos esta vacío
+        // no podrá entrar en funcionamiento, por lo que hay que tener en cuenta no solo
+        // la cantidad de mensajes que
+        // tenemos en los slots de entrada, sino que también si todos los slots de
+        // entrada están ocupados o no.
 
-        //La politica pensada para la ejecucion de los hilos irá en función de la cantidad de mensajes que tengan las tareas en sus
-        //slots de entrada. Hay tareas que a pesar de tener muchos mensajes en un slot, si otro de ellos esta vacío
-        //no podrá entrar en funcionamiento, por lo que hay que tener en cuenta no solo la cantidad de mensajes que
-        //tenemos en los slots de entrada, sino que también si todos los slots de entrada están ocupados o no.
-
-        
     }
 
+    private static int calcularPrioridad(Tarea t) {
+        List<Slot> entradas = t.getEntradas();
+
+        // Para enricher y correlator sumamos todos los mensajes de todas las entradas,
+        // si alguno está vacío, no se ejecuta
+        if (t instanceof Enricher || t instanceof Correlator) {
+            int totalMensajes = 0;
+            for (Slot s : entradas) {
+                int n = s.numMensajes();
+                if (n == 0)
+                    return 0;
+                totalMensajes += n;
+            }
+            return totalMensajes + 100; // sumamos 100 para darle prioridad
+        }
+
+        // Sumamos todos los mensajes de todas las entradas
+        int totalMensajes = 0;
+        for (Slot s : entradas) {
+            totalMensajes += s.numMensajes();
+        }
+
+        // Para meger, se hace media del numero de mensajes con el numero de entradas
+        if (t instanceof Merger) {
+            return totalMensajes / entradas.size();
+        }
+
+        return totalMensajes;
+    }
+
+}
+
+class TareaPrioridad {
+    Tarea tarea;
+    int prioridad;
+
+    public TareaPrioridad(Tarea t, int p) {
+        this.tarea = t;
+        this.prioridad = p;
+    }
 }
