@@ -214,6 +214,13 @@ public class Integracion {
 
         scanner.close();
 
+
+        //La politica pensada para la ejecucion de los hilos irá en función de la cantidad de mensajes que tengan las tareas en sus
+        //slots de entrada. Hay tareas que a pesar de tener muchos mensajes en un slot, si otro de ellos esta vacío
+        //no podrá entrar en funcionamiento, por lo que hay que tener en cuenta no solo la cantidad de mensajes que
+        //tenemos en los slots de entrada, sino que también si todos los slots de entrada están ocupados o no.
+
+        
     }
 
 }

@@ -23,14 +23,11 @@ public abstract class Tarea implements Runnable {
     @Override
     public void run() {
         System.out.println("Iniciando hilo para tarea: " + nombreTarea);
-        // Bucle infinito: el hilo vive mientras la aplicación corra
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                ejecuta();
-            } catch (Exception e) {
-                System.err.println("Error procesando mensaje en " + nombreTarea + ": " + e.getMessage());
-                e.printStackTrace();
-            }
+        try {
+            ejecuta();
+        } catch (Exception e) {
+            System.err.println("Error procesando mensaje en " + nombreTarea + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
