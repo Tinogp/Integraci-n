@@ -38,70 +38,75 @@ public class ConectorBX extends Conector {
         PuertoSolicitud ps = (PuertoSolicitud) puerto;
         Mensaje msg = ps.ejecutaLectura();
 
-        // Obtenemos la query del mensaje entrante
-        String query = msg.getCuerpo().getElementsByTagName("sql").item(0).getTextContent();
+        if (msg == null) {
+            System.err.println("Error en la lectura del mensaje en conector BX");
+            return;
+        } else {
+            // Obtenemos la query del mensaje entrante
+            String query = msg.getCuerpo().getElementsByTagName("sql").item(0).getTextContent();
 
-        Document doc;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
-        try {
-            builder = factory.newDocumentBuilder();
-            doc = builder.newDocument();
+            Document doc;
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = null;
+            try {
+                builder = factory.newDocumentBuilder();
+                doc = builder.newDocument();
 
-            // Elemento raíz que agrupa todos los resultados
-            Element rootElement = doc.createElement("sqlResponseSet");
-            doc.appendChild(rootElement);
+                // Elemento raíz que agrupa todos los resultados
+                Element rootElement = doc.createElement("sqlResponseSet");
+                doc.appendChild(rootElement);
 
-            try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
-                try (ResultSet rs = pstmt.executeQuery()) {
+                try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+                    try (ResultSet rs = pstmt.executeQuery()) {
 
-                    // 1. OBTENER METADATOS (Información sobre las columnas)
-                    ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
-                    int numeroDeColumnas = metaData.getColumnCount();
+                        // 1. OBTENER METADATOS (Información sobre las columnas)
+                        ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
+                        int numeroDeColumnas = metaData.getColumnCount();
 
-                    // 2. Iterar por cada FILA de datos
-                    while (rs.next()) {
-                        // Creamos un elemento genérico para la fila, ej: <resultado> o <row>
-                        Element rowElement = doc.createElement("resultado");
-                        rootElement.appendChild(rowElement);
+                        // 2. Iterar por cada FILA de datos
+                        while (rs.next()) {
+                            // Creamos un elemento genérico para la fila, ej: <resultado> o <row>
+                            Element rowElement = doc.createElement("resultado");
+                            rootElement.appendChild(rowElement);
 
-                        // 3. Iterar por cada COLUMNA de esa fila (dinámicamente)
-                        for (int i = 1; i <= numeroDeColumnas; i++) {
+                            // 3. Iterar por cada COLUMNA de esa fila (dinámicamente)
+                            for (int i = 1; i <= numeroDeColumnas; i++) {
 
-                            // Obtenemos el nombre de la columna para usarlo como etiqueta XML
-                            // getColumnLabel es mejor que getColumnName porque respeta los alias (AS
-                            // nombre)
-                            String nombreColumna = metaData.getColumnLabel(i);
+                                // Obtenemos el nombre de la columna para usarlo como etiqueta XML
+                                // getColumnLabel es mejor que getColumnName porque respeta los alias (AS
+                                // nombre)
+                                String nombreColumna = metaData.getColumnLabel(i);
 
-                            // Obtenemos el valor sin importar el tipo (Object)
-                            Object valor = rs.getObject(i);
+                                // Obtenemos el valor sin importar el tipo (Object)
+                                Object valor = rs.getObject(i);
 
-                            // Creamos la etiqueta XML con el nombre de la columna
-                            // Cuidado: Los nombres de columnas no deben tener espacios para ser XML válido
-                            Element colElement = doc.createElement(nombreColumna);
+                                // Creamos la etiqueta XML con el nombre de la columna
+                                // Cuidado: Los nombres de columnas no deben tener espacios para ser XML válido
+                                Element colElement = doc.createElement(nombreColumna);
 
-                            // Si el valor no es null, lo convertimos a String
-                            if (valor != null) {
-                                colElement.setTextContent(valor.toString());
-                            } else {
-                                colElement.setTextContent(""); // O manejar nulos como prefieras
+                                // Si el valor no es null, lo convertimos a String
+                                if (valor != null) {
+                                    colElement.setTextContent(valor.toString());
+                                } else {
+                                    colElement.setTextContent(""); // O manejar nulos como prefieras
+                                }
+
+                                rowElement.appendChild(colElement);
                             }
-
-                            rowElement.appendChild(colElement);
                         }
                     }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // Aquí podrías agregar al XML un nodo de <error>
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // Aquí podrías agregar al XML un nodo de <error>
+
+                // Enviamos el XML construido
+                msg.setCuerpo(doc);
+                ps.ejecutaEscritura(msg);
+
+            } catch (ParserConfigurationException ex) {
+                System.getLogger(ConectorBX.class.getName()).log(System.Logger.Level.ERROR, "Error XML", ex);
             }
-
-            // Enviamos el XML construido
-            msg.setCuerpo(doc);
-            ps.ejecutaEscritura(msg);
-
-        } catch (ParserConfigurationException ex) {
-            System.getLogger(ConectorBX.class.getName()).log(System.Logger.Level.ERROR, "Error XML", ex);
         }
     }
 }

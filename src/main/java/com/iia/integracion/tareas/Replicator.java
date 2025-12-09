@@ -17,7 +17,7 @@ public class Replicator extends Tarea {
      */
     public Replicator(List<Slot> entradas, List<Slot> salidas) {
 
-        super(entradas, salidas);
+        super(entradas, salidas, "Replicator");
 
         //Comprobar numeros de slots para el replicator
         if (entradas == null || entradas.size() != 1) {

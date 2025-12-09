@@ -7,18 +7,16 @@ import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 
 public class IdSetter extends Tarea {
-    
+
     public IdSetter(List<Slot> entradas, List<Slot> salidas) {
-        super(entradas, salidas);
+        super(entradas, salidas, "IdSetter");
     }
 
     @Override
     public void ejecuta() {
-        for (int i = 0; i < entradas.get(0).numMensajes(); i++) {
-            Mensaje msg = entradas.get(0).leerSlot();
-            msg.setIdCorrelator(UUID.randomUUID());
-            salidas.get(0).escribirSlot(msg);
-        }
+        Mensaje msg = entradas.get(0).leerSlot();
+        msg.setIdCorrelator(UUID.randomUUID());
+        salidas.get(0).escribirSlot(msg);
     }
 
 }

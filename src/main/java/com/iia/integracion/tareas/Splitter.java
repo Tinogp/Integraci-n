@@ -24,41 +24,39 @@ public class Splitter extends Tarea {
     private String xpathExpression;
 
     public Splitter(List<Slot> entradas, List<Slot> salidas, String xPathEspression) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Splitter");
         this.xpathExpression = xPathEspression;
     }
 
     @Override
     public void ejecuta() {
-        while (entradas.getFirst().numMensajes() > 0) {
-            try {
-                Mensaje msg = entradas.getFirst().leerSlot();
-                Document docOriginal = msg.getCuerpo();
-                UUID idOriginal = msg.getId();
-                // System.out.println(msg.toString());
-                Document doc = msg.getCuerpo();
-                XPathFactory xPathFactory = XPathFactory.newInstance();
-                XPath xpath = xPathFactory.newXPath();
-                NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Node node = nodes.item(i);
-                    Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
-                    fragmento.setId(idOriginal);
-                    fragmento.setTamano(nodes.getLength());
-                    fragmento.setIdFragment((long) (i + 1));
-                    // Elimina el nodo del documento original usando su padre
-                    Node parent = node.getParentNode();
-                    if (parent != null) {
-                        parent.removeChild(node);
-                    }
-                    salidas.getFirst().escribirSlot(fragmento);
+        try {
+            Mensaje msg = entradas.getFirst().leerSlot();
+            Document docOriginal = msg.getCuerpo();
+            UUID idOriginal = msg.getId();
+            // System.out.println(msg.toString());
+            Document doc = msg.getCuerpo();
+            XPathFactory xPathFactory = XPathFactory.newInstance();
+            XPath xpath = xPathFactory.newXPath();
+            NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                Mensaje fragmento = new Mensaje(crearDocumentoDesdeNodo(node), msg.getId());
+                fragmento.setId(idOriginal);
+                fragmento.setTamano(nodes.getLength());
+                fragmento.setIdFragment((long) (i + 1));
+                // Elimina el nodo del documento original usando su padre
+                Node parent = node.getParentNode();
+                if (parent != null) {
+                    parent.removeChild(node);
                 }
-                ComandasSingleton.addMensaje(msg.getId(), docOriginal);
-            } catch (XPathExpressionException ex) {
-                Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
+                salidas.getFirst().escribirSlot(fragmento);
             }
+            ComandasSingleton.addMensaje(msg.getId(), docOriginal);
+        } catch (XPathExpressionException ex) {
+            Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Splitter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

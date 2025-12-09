@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 public class Enricher extends Tarea {
 
     public Enricher(List<Slot> entradas, List<Slot> salidas) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Enricher");
     }
 
     @Override

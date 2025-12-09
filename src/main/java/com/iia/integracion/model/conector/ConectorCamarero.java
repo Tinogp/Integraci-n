@@ -16,6 +16,8 @@ import org.w3c.dom.Document;
  */
 public class ConectorCamarero extends Conector {
 
+    private static int contador = 0;
+
     public ConectorCamarero(Puerto puerto, String Polling) {
         super(puerto, Polling);
     }
@@ -30,10 +32,9 @@ public class ConectorCamarero extends Conector {
         }
 
         ////// CAMBIOS //////
-
         if (msg != null && msg.getCuerpo() != null) {
 
-            File archivoSalida = new File(Polling);
+            File archivoSalida = new File(Polling + contador++);
             if (archivoSalida.exists())
                 archivoSalida.delete(); // Eliminar el archivo si ya existe
             exportarDocumento(msg.getCuerpo(), archivoSalida.getAbsolutePath());

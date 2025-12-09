@@ -26,7 +26,7 @@ public class Correlator extends Tarea {
     private String xpathExpression;
 
     public Correlator(List<Slot> entradas, List<Slot> salidas, String xpath) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Correlator");
         this.xpathExpression = xpath;
         mensajesEntrantesCorelator = new HashMap<>();
         mensajesEntrantesSinCorrelator = new HashMap<>();

@@ -28,7 +28,7 @@ public class Aggregator extends Tarea {
     private String xpathExpression;
 
     public Aggregator(List<Slot> entradas, List<Slot> salidas, String xpath) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Aggregator");
         this.xpathExpression = xpath;
 
         this.mapaFragmentos = new HashMap<>();

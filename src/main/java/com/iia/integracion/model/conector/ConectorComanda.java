@@ -50,6 +50,7 @@ public class ConectorComanda extends Conector {
             //msg.setId(i);
             if (puerto instanceof PuertoEntrada) {
                 ((PuertoEntrada) puerto).ejecutaEscritura(msg);
+                file.delete();
             } else {
                 System.err.println("Error en el tipo del puerto entrada en conector comanda...");
             }

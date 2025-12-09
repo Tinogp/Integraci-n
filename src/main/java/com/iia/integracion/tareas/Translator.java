@@ -26,7 +26,7 @@ public class Translator extends Tarea {
     private String xpathExpression;
 
     public Translator(List<Slot> entradas, List<Slot> salidas, String xsltFilePath) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Translator");
         this.xpathExpression = xsltFilePath;
     }
 

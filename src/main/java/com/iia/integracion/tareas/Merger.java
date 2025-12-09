@@ -11,17 +11,15 @@ import java.util.List;
 public class Merger extends Tarea {
 
     public Merger(List<Slot> entradas, List<Slot> salidas) {
-        super(entradas, salidas);
+        super(entradas, salidas, "Merger");
     }
 
     @Override
     public void ejecuta() {
         for (Slot slot : entradas) {
-            while (slot.numMensajes() > 0) {
-                Mensaje mensaje = slot.leerSlot();
-                if (mensaje != null) {
-                    salidas.getFirst().escribirSlot(mensaje);
-                }
+            Mensaje mensaje = slot.leerSlot();
+            if (mensaje != null) {
+                salidas.getFirst().escribirSlot(mensaje);
             }
         }
     }
