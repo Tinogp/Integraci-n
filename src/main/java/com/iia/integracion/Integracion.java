@@ -213,7 +213,7 @@ public class Integracion {
                     agg.ejecuta();
                     camarero.ejecuta();
                 case 19:
-
+                    //Ejecuta concurrentemente
                     ExecutorService poolConectores = Executors.newCachedThreadPool();
                     poolConectores.submit(comandas);
                     poolConectores.submit(bf);

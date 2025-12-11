@@ -2,11 +2,21 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../../NetBeansProjects/PCD_P3"
+		},
+		{
+			"path": "../../../NetBeansProjects/PCD_Prac4_EJEMPLO"
+		},
+		{
+			"path": "../../../NetBeansProjects/PCD_Prac5_APP"
 		}
 	],
 	"settings": {
 		"java.dependency.packagePresentation": "hierarchical",
 		"java.debug.settings.onBuildFailureProceed": true,
-		"java.dependency.syncWithFolderExplorer": true
+		"java.dependency.syncWithFolderExplorer": true,
+		"java.configuration.updateBuildConfiguration": "interactive"
 	}
 }
