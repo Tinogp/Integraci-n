@@ -4,15 +4,14 @@ import com.iia.integracion.model.mensaje.Mensaje;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * 
+ *
  * @author tinog
  */
-public class StrategyLeerPrimero implements StrategyAcceso{
+public class StrategyLeerPrimero implements StrategyAcceso {
 
     @Override
     public Mensaje acceder(BlockingQueue<Mensaje> buffer) {
         if (buffer.isEmpty()) {
-            System.out.println("Buffer vacio...");
             return null;
         }
         Mensaje mensaje;
@@ -25,5 +24,5 @@ public class StrategyLeerPrimero implements StrategyAcceso{
         }
         return mensaje;
     }
-    
+
 }

@@ -16,7 +16,7 @@
                 <xsl:value-of select="qty"/>
             </CantidadFacturada>
             <PrecioTotal>
-                <xsl:value-of select="qty * unitPrice"/>
+                <xsl:value-of select="qty  unitPrice"/>
             </PrecioTotal>
         </LineaFactura>
     </xsl:template>

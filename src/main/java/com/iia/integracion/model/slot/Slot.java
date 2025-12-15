@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ *
  * @author tinog
  */
 public class Slot {
@@ -22,12 +23,12 @@ public class Slot {
         this.estrategiaAcceso = estrategiaInicial;
     }
 
-    public void setStrategy(StrategyAcceso nuevaEstrategia) {
+    public synchronized void setStrategy(StrategyAcceso nuevaEstrategia) {
         System.out.println("\nCambio de estrategia, de " + estrategiaAcceso + " a " + nuevaEstrategia + "\n");
         this.estrategiaAcceso = nuevaEstrategia;
     }
 
-    public void escribirSlot(Mensaje mensaje) {
+    public synchronized void escribirSlot(Mensaje mensaje) {
         System.out.println("Se esta escribiendo el mensaje: " + mensaje);
         try {
             buff.put(mensaje);
@@ -37,21 +38,21 @@ public class Slot {
         }
     }
 
-    public Mensaje leerSlot() {
+    public synchronized Mensaje leerSlot() {
         Mensaje mensaje = estrategiaAcceso.acceder(buff);
         System.out.println("Se esta leyendo el mensaje: " + mensaje);
         return mensaje;
     }
 
-    public void eliminarListaMensajes(List<Mensaje> listaMensajes) {
+    public synchronized void eliminarListaMensajes(List<Mensaje> listaMensajes) {
         buff.removeAll(listaMensajes);
     }
 
-    public int numMensajes() {
+    public synchronized int numMensajes() {
         return buff.size();
     }
 
-    public List<Mensaje> getBuff() {
+    public synchronized List<Mensaje> getBuff() {
         if (estrategiaAcceso instanceof StrategyCopiaBuff) {
             return ((StrategyCopiaBuff) estrategiaAcceso).copiarBuff(buff);
         } else {

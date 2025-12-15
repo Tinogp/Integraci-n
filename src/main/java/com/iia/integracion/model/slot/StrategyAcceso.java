@@ -4,7 +4,7 @@ import com.iia.integracion.model.mensaje.Mensaje;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * 
+ *
  * @author tinog
  */
 public interface StrategyAcceso {

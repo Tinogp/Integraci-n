@@ -1,11 +1,10 @@
 package com.iia.integracion.model.puerto;
-
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
 
-/**
+/** 
  *
- * @author tinog
+ *@author tinog
  */
 public class PuertoSolicitud extends Puerto {
 

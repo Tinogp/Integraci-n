@@ -54,8 +54,10 @@ public class Aggregator extends Tarea {
                 Mensaje msgFinal = new Mensaje(infoCompleta, idMsg);
 
                 salidas.getFirst().escribirSlot(msgFinal);
-                entradas.getFirst().eliminarListaMensajes(List.of(msg));
-                mapaFragmentos.remove(idMsg);
+                entradas.getFirst().eliminarListaMensajes(listaFrag);
+                for(Mensaje m:listaFrag){
+                    mapaFragmentos.remove(m.getId());
+                }
             }
         }
     }

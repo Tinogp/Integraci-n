@@ -19,7 +19,7 @@ public abstract class Conector implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             ejecuta();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
