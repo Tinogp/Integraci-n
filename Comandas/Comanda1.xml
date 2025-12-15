@@ -1,0 +1,13 @@
+<cafe_order>
+    <order_id>1</order_id>
+    <drinks>
+        <drink>
+            <nombre>Café</nombre>
+            <type>hot</type>
+        </drink>
+        <drink>
+            <nombre>coca-cola</nombre>
+            <type>cold</type>
+        </drink>
+    </drinks>
+</cafe_order>
