@@ -11,11 +11,13 @@ public abstract class Tarea implements Runnable {
     protected List<Slot> entradas;
     protected List<Slot> salidas;
     String nombreTarea;
+    private int prioridad;
 
     public Tarea(List<Slot> entradas, List<Slot> salidas, String nombreTarea) {
         this.entradas = entradas;
         this.salidas = salidas;
         this.nombreTarea = nombreTarea;
+        this.prioridad = -1;
     }
 
     public abstract void ejecuta();
@@ -29,6 +31,14 @@ public abstract class Tarea implements Runnable {
             System.err.println("Error procesando mensaje en " + nombreTarea + ": " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public void setPrioridad(int prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    public int getPrioridad() {
+        return prioridad;
     }
 
     public List<Slot> getEntradas() {
