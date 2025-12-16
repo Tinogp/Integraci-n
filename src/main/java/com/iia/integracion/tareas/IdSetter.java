@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import com.iia.integracion.model.mensaje.Mensaje;
 import com.iia.integracion.model.slot.Slot;
-
+/**
+*
+*@Alvaro
+*/
 public class IdSetter extends Tarea {
 
     public IdSetter(List<Slot> entradas, List<Slot> salidas) {
